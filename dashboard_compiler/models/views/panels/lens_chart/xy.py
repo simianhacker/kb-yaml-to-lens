@@ -3,7 +3,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
-from dashboard_compiler.models.views.panels.lens import KbnBaseStateVisualization
+from dashboard_compiler.models.views.panels.lens import KbnBaseStateVisualization, KbnLayerColorMapping
 
 # Define nested models based on reference/transpiled/lens/public/visualizations/xy/types.py
 
@@ -52,7 +52,7 @@ class XYDataLayerConfig(BaseModel):  # Renamed from KbnXYVisualizationLayer
     xScaleType: Any | None = None  # Use Any for now, refine if needed
     isHistogram: bool | None = None
     columnToLabel: str | None = None
-    colorMapping: Any | None = None  # Use Any for now, refine if needed
+    colorMapping: KbnLayerColorMapping | None = None  # Use Any for now, refine if needed
 
 
 class XYReferenceLineLayerConfig(BaseModel):
