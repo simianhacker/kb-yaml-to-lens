@@ -19,6 +19,7 @@ class KbnControlSort(BaseModel):
 class KbnBaseControlExplicitInput(BaseModel):
     dataViewId: str
     fieldName: str
+    title: str | None = None
 
 
 class KbnOptionsListControlExplicitInput(KbnBaseControlExplicitInput):

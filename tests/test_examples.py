@@ -32,7 +32,14 @@ INCLUDED_SCENARIOS = [
     "one-markdown",  # Markdown
     "one-pie-chart",  # Lens
     "one-query",
-    "one-vertical-bar"
+    "one-vertical-bar",  # Existing XY chart scenario
+    # Add new XY chart scenarios
+    "xy/one-area-percent-timestamp-two-series",
+    "xy/one-area-stacked-timestamp-two-series",
+    "xy/one-area-unstacked-timestamp-two-series",
+    "xy/one-horizontal-bar-unstacked-timestamp-two-series",
+    "xy/one-line-unstacked-timestamp-two-series",
+    "xy/one-vertical-bar-unstacked-timestamp-breakdown",
 ]
 
 # EXCLUDE_PATHS for DeepDiff might need adjustment based on the final view model structure

@@ -45,7 +45,8 @@ extend-exclude = [
     "venv",
     "__pycache__",
     "build",
-    "dist"
+    "dist",
+    "reference"
 ]
 
 [tool.ruff.lint]

@@ -1,69 +1,138 @@
 # ignore: N815
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
+from dashboard_compiler.models.views.panels.lens import KbnBaseStateVisualization
 
-# Base class for Lens visualization state
-class KbnLensVisualizationState(BaseModel):
-    """Base model for the 'visualization' object within a Lens panel state in the Kibana JSON structure."""
+# Define nested models based on reference/transpiled/lens/public/visualizations/xy/types.py
 
-    layers: list[dict[str, Any]] = Field(default_factory=list)  # Common field, specific layer models in subclasses
+type SeriesType = Literal["line", "bar", "area", "area_stacked", "bar_stacked", "area_percentage_stacked", "bar_percentage_stacked"]
 
-
-# Define nested models for XY Visualization Layer based on samples
-class KbnXYVisualizationLayerColorMappingRule(BaseModel):
-    type: str = "other"
-
-
-class KbnXYVisualizationLayerColorMappingColor(BaseModel):
-    type: str = "loop"
+class LabelsOrientationConfig(BaseModel):
+    x: float | None = None
+    yLeft: float | None = None
+    yRight: float | None = None
 
 
-class KbnXYVisualizationLayerColorMappingSpecialAssignment(BaseModel):
-    rule: KbnXYVisualizationLayerColorMappingRule = Field(default_factory=KbnXYVisualizationLayerColorMappingRule)
-    color: KbnXYVisualizationLayerColorMappingColor = Field(default_factory=KbnXYVisualizationLayerColorMappingColor)
-    touched: bool = False
+class YAxisMode(BaseModel):
+    # Define fields based on actual Kibana structure if needed, using object for now
+    name: str  # Added name field based on usage in compile logic
+
+class AxisConfig(BaseModel):
+    # Define fields based on actual Kibana structure if needed, using object for now
+    pass
 
 
-class KbnXYVisualizationLayerColorMapping(BaseModel):
-    assignments: list[Any] = Field(default_factory=list)
-    specialAssignments: list[KbnXYVisualizationLayerColorMappingSpecialAssignment] = Field(
-        default_factory=lambda: [KbnXYVisualizationLayerColorMappingSpecialAssignment()]
-    )
-    paletteId: str = "default"
-    colorMode: dict[str, str] = Field(default_factory=lambda: {"type": "categorical"})
+class YConfig(BaseModel):
+    forAccessor: str
+    color: str | None = None
+    icon: str | None = None
+    lineWidth: float | None = None
+    lineStyle: Any | None = None  # Use Any for now, refine if needed
+    fill: Any | None = None  # Use Any for now, refine if needed
+    iconPosition: Any | None = None  # Use Any for now, refine if needed
+    textVisibility: bool | None = None
+    axisMode: YAxisMode | None = None
 
 
-class KbnXYVisualizationLayer(BaseModel):
+class XYDataLayerConfig(BaseModel):  # Renamed from KbnXYVisualizationLayer
     layerId: str
-    accessors: list[str]  # List of column IDs for metrics (Y-axis)
-    xAccessor: str  # Column ID for dimension (X-axis)
-    position: str
-    seriesType: str
-    showGridlines: bool
-    layerType: str
-    colorMapping: KbnXYVisualizationLayerColorMapping
+    accessors: list[str]
+    layerType: Literal["data"]
+    seriesType: SeriesType
+    xAccessor: str | None = None
+    simpleView: bool | None = None
+    yConfig: list[YConfig] | None = None
     splitAccessor: str | None = None
-    # Add yConfig if needed based on sample JSON
+    palette: Any | None = None  # Use Any for now, refine if needed
+    collapseFn: Literal["sum"] | Literal["avg"] | Literal["min"] | Literal["max"] | None = None
+    xScaleType: Any | None = None  # Use Any for now, refine if needed
+    isHistogram: bool | None = None
+    columnToLabel: str | None = None
+    colorMapping: Any | None = None  # Use Any for now, refine if needed
+
+
+class XYReferenceLineLayerConfig(BaseModel):
+    layerId: str
+    accessors: list[str]
+    yConfig: list[YConfig] | None = None
+    layerType: Literal["referenceLine"]
+
+
+class XYAnnotationLayerConfigCachedMetadata(BaseModel):
+    title: str
+    description: str
+    tags: list[str]
+
+
+class XYByValueAnnotationLayerConfig(BaseModel):
+    layerId: str
+    layerType: Literal["annotations"]
+    annotations: list[Any]  # Use Any for now, refine if needed
+    indexPatternId: str
+    ignoreGlobalFilters: bool
+    cachedMetadata: XYAnnotationLayerConfigCachedMetadata | None = None
+
+
+class XYByReferenceAnnotationLayerConfig(BaseModel):
+    layerId: str
+    layerType: Literal["annotations"]
+    annotations: list[Any]  # Use Any for now, refine if needed
+    indexPatternId: str
+    ignoreGlobalFilters: bool
+    cachedMetadata: XYAnnotationLayerConfigCachedMetadata | None = None
+    annotationGroupId: str
+    __lastSaved: Any  # Use Any for now, refine if needed
+
+
+class ValidXYDataLayerConfig(BaseModel):
+    xAccessor: str
+    layerId: str
+    accessors: list[str]
+    layerType: Literal["data"]
+    seriesType: SeriesType
+    simpleView: bool | None = None
+    yConfig: list[YConfig] | None = None
+    splitAccessor: str | None = None
+    palette: Any | None = None  # Use Any for now, refine if needed
+    collapseFn: Literal["sum"] | Literal["avg"] | Literal["min"] | Literal["max"] | None = None
+    xScaleType: Any | None = None  # Use Any for now, refine if needed
+    isHistogram: bool | None = None
+    columnToLabel: str | None = None
+    colorMapping: Any | None = None  # Use Any for now, refine if needed
 
 
 # Subclass Kbnfor XY visualizations state (JSON structure)
-class KbnXYVisualizationState(KbnLensVisualizationState):
+class KbnXYVisualizationState(KbnBaseStateVisualization):
     """Represents the 'visualization' object for XY charts (bar, line, area) in the Kibana JSON structure."""
 
-    legend: dict[str, Any]
-    valueLabels: str
-    fittingFunction: str
-    axisTitlesVisibilitySettings: dict[str, bool]
-    tickLabelsVisibilitySettings: dict[str, bool]
-    labelsOrientation: dict[str, int]
-    gridlinesVisibilitySettings: dict[str, bool]
-    preferredSeriesType: str
-    layers: list[KbnXYVisualizationLayer] = Field(default_factory=list)  # Use specific layer model
-    showCurrentTimeMarker: bool
-    yLeftExtent: dict[str, Any]
-    yLeftScale: str
-    yRightScale: str
-    yTitle: str
-    # Add other XY specific fields from sample JSON as needed
+    preferredSeriesType: SeriesType | None = None
+    legend: Any  # Use Any for now, refine if needed
+    valueLabels: Literal["hide"] | Literal["show"] | None = None
+    fittingFunction: Any | None = None  # Use Any for now, refine if needed
+    emphasizeFitting: bool | None = None
+    endValue: Any | None = None  # Use Any for now, refine if needed
+    xExtent: Any | None = None  # Use Any for now, refine if needed
+    yLeftExtent: Any | None = None  # Use Any for now, refine if needed
+    yRightExtent: Any | None = None  # Use Any for now, refine if needed
+    layers: list[XYDataLayerConfig | XYReferenceLineLayerConfig | XYByValueAnnotationLayerConfig, XYByReferenceAnnotationLayerConfig] = (
+        Field(default_factory=list)
+    )
+    xTitle: str | None = None
+    yTitle: str | None = None
+    yRightTitle: str | None = None
+    yLeftScale: Any | None = None  # Use Any for now, refine if needed
+    yRightScale: Any | None = None  # Use Any for now, refine if needed
+    axisTitlesVisibilitySettings: Any | None = None  # Use Any for now, refine if needed
+    tickLabelsVisibilitySettings: Any | None = None  # Use Any for now, refine if needed
+    gridlinesVisibilitySettings: Any | None = None  # Use Any for now, refine if needed
+    labelsOrientation: LabelsOrientationConfig | None = None
+    curveType: Any | None = None  # Use Any for now, refine if needed
+    fillOpacity: float | None = None
+    minBarHeight: float | None = None
+    hideEndzones: bool | None = None
+    showCurrentTimeMarker: bool | None = None
+
+
+# Note: ValidLayer is not directly used in the main State model, so not included here for now.

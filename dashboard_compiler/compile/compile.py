@@ -199,6 +199,7 @@ def compile_control_group_input(dashboard: Dashboard) -> KbnControlGroupInput:
             new_control = KbnOptionsListControlExplicitInput(
                 dataViewId=control.data_view,
                 fieldName=control.field,
+                title=control.label,
                 searchTechnique=control.search_technique or "prefix",
                 selectedOptions=[],
                 sort=sort,
@@ -207,7 +208,7 @@ def compile_control_group_input(dashboard: Dashboard) -> KbnControlGroupInput:
         elif isinstance(control, RangeSliderControl):
             new_type = "rangeSliderControl"
 
-            new_control = KbnRangeSliderControlExplicitInput(dataViewId=control.data_view, fieldName=control.field, step=control.step)
+            new_control = KbnRangeSliderControlExplicitInput(dataViewId=control.data_view, fieldName=control.field, step=control.step, title=control.label)
 
         controls[control_index] = KbnControl(grow=True, order=i, type=new_type, width=control.width, explicitInput=new_control)
 
@@ -272,7 +273,7 @@ def compile_dashboard_filter(filter: Filter, negate: bool = False) -> KbnFilter:
 
     if isinstance(filter, PhraseFilter):
         return KbnFilter(
-            meta={"type": "phrase", "params": {"query": filter.equals}, ** base_meta},
+            meta={"type": "phrase", "params": {"query": filter.equals}, **base_meta},
             query={"match_phrase": {filter.field: filter.equals}},
         )
 

@@ -6,7 +6,7 @@ from dashboard_compiler.compile.compile import compile_yaml_dashboard
 
 project_root = Path(__file__).parent.parent
 
-
+INPUT_DIR = project_root / "inputs"
 SCENARIO_DIR = project_root / "tests/scenarios"
 OUTPUT_DIR = project_root / "output"
 
@@ -75,6 +75,25 @@ def get_scenarios() -> list[Path]:
 
     return yaml_files
 
+def get_inputs() -> list[Path]:
+    """
+    Retrieves a list of input YAML files from the INPUT_DIR.
+
+    Returns:
+        A list of Path objects pointing to the input YAML files.
+    """
+    if not INPUT_DIR.is_dir():
+        print(f"Error: Input directory not found: {INPUT_DIR}", file=sys.stderr)
+        sys.exit(1)
+
+    # Use rglob to find YAML files recursively
+    yaml_files = sorted(INPUT_DIR.rglob("*.yaml"))
+
+    if not yaml_files:
+        print(f"Warning: No YAML files found in {INPUT_DIR}", file=sys.stderr)
+
+    return yaml_files
+
 
 def main():
     """
@@ -84,7 +103,7 @@ def main():
     # Create the output directory if it doesn't exist
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    scenarios = get_scenarios()
+    scenarios = [*get_inputs()]#,*get_scenarios()]
 
     ndjson_lines = []
 

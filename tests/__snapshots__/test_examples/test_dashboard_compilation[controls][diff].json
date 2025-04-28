@@ -1,10 +1,12 @@
 {
   "dictionary_item_added": {
+    "root['attributes']['controlGroupInput']['panelsJSON']['0086b299-caf9-4d42-a574-31eec9226a48']['explicitInput']['title']": "An options List",
     "root['attributes']['controlGroupInput']['panelsJSON']['4ff3f119-4fd4-9f20-d3de-066f427349a9']": {
       "explicitInput": {
         "dataViewId": "metrics-*",
         "fieldName": "severity_number",
-        "step": 1
+        "step": 1,
+        "title": "A Range Slider"
       },
       "grow": true,
       "order": 1,

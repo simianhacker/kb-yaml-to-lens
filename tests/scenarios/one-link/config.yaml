@@ -8,5 +8,5 @@ dashboard:
     type: links
     grid: { x: 0, y: 0, w: 48, h: 2 }
     links:
-    - title: "Pie Charts"
+    - label: Pie Charts
       dashboard: 9f2896f6-9ca0-4f63-9960-631d5af3840c # ID from kibana export for testing

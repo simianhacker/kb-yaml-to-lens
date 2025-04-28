@@ -31,6 +31,7 @@ class KbnQuery(BaseModel):
 
 class KbnBasePanelEmbeddableConfig(BaseModel):
     enhancements: dict[str, Any] = Field(default_factory=lambda: {"dynamicActions": {"events": []}})
+    hidePanelTitles: bool | None = None
 
 
 class KbnBasePanel(BaseModel):

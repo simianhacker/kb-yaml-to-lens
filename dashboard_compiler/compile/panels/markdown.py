@@ -25,6 +25,7 @@ def compile_markdown_panel(panel: MarkdownPanel) -> KbnMarkdownPanel:
         panelIndex=panel_index,
         gridData=grid_data,
         embeddableConfig=KbnMarkdownEmbeddableConfig(
+            hidePanelTitles=panel.hide_title,
             savedVis=KbnMarkdownSavedVis(
                 # id=panel_index, #appears blank in samples
                 title=panel.title,

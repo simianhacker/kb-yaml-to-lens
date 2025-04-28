@@ -14,7 +14,8 @@
             "sort": {
               "by": "_count",
               "direction": "desc"
-            }
+            },
+            "title": "An options List"
           },
           "grow": true,
           "order": 0,
@@ -25,7 +26,8 @@
           "explicitInput": {
             "dataViewId": "metrics-*",
             "fieldName": "severity_number",
-            "step": 1
+            "step": 1,
+            "title": "A Range Slider"
           },
           "grow": true,
           "order": 1,

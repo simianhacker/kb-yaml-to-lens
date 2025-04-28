@@ -20,9 +20,9 @@ from dashboard_compiler.models.views.base import KbnBasePanel, KbnBasePanelEmbed
 
 # Define nested models for Links panel embeddableConfig based on samples
 class KbnLink(BaseModel):
-    type: Literal["dashboardLink", "urlLink"]
+    type: Literal["dashboardLink", "externalLink"]
     id: str | None = None
-    url: str | None = None
+    destination: str | None = None
     label: str | None = None
     order: int
     destinationRefName: str | None = None

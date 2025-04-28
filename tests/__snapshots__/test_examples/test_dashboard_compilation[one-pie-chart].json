@@ -52,17 +52,17 @@
                           "label": "Top 5 values of aerospike.namespace",
                           "operationType": "terms",
                           "params": {
-                            "exclude": [],
-                            "excludeIsRegex": false,
-                            "include": [],
-                            "includeIsRegex": false,
-                            "missingBucket": false,
+                            "exclude": null,
+                            "excludeIsRegex": null,
+                            "include": null,
+                            "includeIsRegex": null,
+                            "missingBucket": null,
                             "orderBy": {
                               "columnId": "fadbe80d-a574-4ab6-80c0-3bfe4c4e6d33",
                               "type": "column"
                             },
                             "orderDirection": "desc",
-                            "otherBucket": true,
+                            "otherBucket": null,
                             "parentFormat": {
                               "id": "terms"
                             },

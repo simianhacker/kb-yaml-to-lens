@@ -8,6 +8,17 @@ dashboard:
     index_pattern: metrics-*
     chart:
       type: bar_stacked
+      axis:
+        left:
+          title: "Count of records"
+          orientation: vertical
+          scale: linear
+        bottom:
+          title: "@timestamp"
+          orientation: horizontal
+      legend:
+        position: right
+        orientation: vertical
       # X-axis dimension
       dimensions:
         - field: "@timestamp"

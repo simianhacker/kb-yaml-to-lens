@@ -106,7 +106,7 @@ class KbnBaseStateVisualizationLayer(BaseModel):
 
 
 class KbnBaseStateVisualization(BaseModel):
-    shape: str
+    # Removed shape field
     layers: list[KbnBaseStateVisualizationLayer] = Field(default_factory=list)
 
 

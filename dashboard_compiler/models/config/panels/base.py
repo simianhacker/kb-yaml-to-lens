@@ -21,3 +21,4 @@ class BasePanel(BaseModel):
     description: str = Field("", description="(Optional) A description for the panel.")
     type: str = Field(..., description="(Required) The type of panel.")
     grid: Grid = Field(..., description="(Required) Defines the panel's position and size on the dashboard grid.")
+    hide_title: bool | None = Field(None, description="(Optional) Whether to hide the panel title. Defaults to None (not hidden).")

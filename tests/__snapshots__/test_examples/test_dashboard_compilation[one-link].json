@@ -31,8 +31,9 @@
             "layout": "horizontal",
             "links": [
               {
-                "destinationRefName": "link_9f2896f6-9ca0-4f63-9960-631d5af3840c_dashboard",
-                "id": "9f2896f6-9ca0-4f63-9960-631d5af3840c",
+                "destinationRefName": "link_a62c88e6-3894-3b5e-32fc-b06eda8ea08f_dashboard",
+                "id": "a62c88e6-3894-3b5e-32fc-b06eda8ea08f",
+                "label": "Pie Charts",
                 "order": 0,
                 "type": "dashboardLink"
               }
@@ -63,7 +64,7 @@
   "references": [
     {
       "id": "9f2896f6-9ca0-4f63-9960-631d5af3840c",
-      "name": "e19a731d-0163-490a-a691-0bd1b1264d0b:link_9f2896f6-9ca0-4f63-9960-631d5af3840c_dashboard",
+      "name": "e19a731d-0163-490a-a691-0bd1b1264d0b:link_a62c88e6-3894-3b5e-32fc-b06eda8ea08f_dashboard",
       "type": "dashboard"
     }
   ],
