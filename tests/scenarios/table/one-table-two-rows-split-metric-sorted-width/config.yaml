@@ -1,7 +1,7 @@
 dashboard:
   title: Table with two rows - sort and width - a split metric
   description: "A dashboard with a Table with two rows and a metric"
-  id: b2467fd4-06d2-4b63-8b1b-2fe7d6f70c71
+  id: 77075d20-cef4-b9a2-7a2a-ee46d8ad6464
   panels:
   - title: "table"
     type: lens

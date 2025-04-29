@@ -1,4 +1,3 @@
-
 from dashboard_compiler.compile.utils import stable_id_generator
 from dashboard_compiler.models.config.panels.lens_charts.datatable import LensDatatableChart
 from dashboard_compiler.models.views.panels.lens_chart.datatable import (
@@ -25,7 +24,7 @@ def compile_lens_datatable_chart(
 
     visualization_columns = []
 
-    for id, row in rows_by_id.items():
+    for id, _ in rows_by_id.items():
         visualization_columns.append(
             KbnDatatableColumn(
                 columnId=id,
@@ -34,7 +33,7 @@ def compile_lens_datatable_chart(
             )
         )
 
-    for id, metric in metrics_by_id.items():
+    for id, _ in metrics_by_id.items():
         visualization_columns.append(
             KbnDatatableColumn(
                 columnId=id,
@@ -43,7 +42,7 @@ def compile_lens_datatable_chart(
             )
         )
 
-    for id, split in split_by_by_id.items():
+    for id, _ in split_by_by_id.items():
         visualization_columns.append(
             KbnDatatableColumn(
                 columnId=id,

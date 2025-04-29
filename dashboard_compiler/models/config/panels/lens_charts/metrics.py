@@ -7,7 +7,14 @@ from dashboard_compiler.models.config.panels.lens_charts.components.metric impor
 
 
 class LensMetricsChart(BaseLensChart):
-    """Represents a Metric chart within a Lens panel in the YAML schema."""
+    """
+    Represents a Metric chart configuration within a Lens panel in the YAML schema.
+
+    Metric charts display a single value or a list of values, often representing
+    key performance indicators.
+    """
 
     type: Literal["metric"] = "metric"
-    metrics: list[Metric] = Field(..., description="(Required) List of metrics for the chart.")
+    metrics: list[Metric] = Field(
+        ..., description="A list of metric configurations to be displayed in the chart."
+    )

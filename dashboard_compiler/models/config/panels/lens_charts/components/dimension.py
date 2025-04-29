@@ -1,27 +1,54 @@
+from typing import Literal
+
 from pydantic import BaseModel, Field
 
 from dashboard_compiler.models.config.shared import Sort
 
 
 class Dimension(BaseModel):
-    """Represents a dimension object within a Lens chart in the YAML schema."""
+    """
+    Represents a dimension configuration within a Lens chart in the YAML schema.
 
-    id: str = Field(default=None, description="(Optional) Unique identifier for the metric.")
-    field: str = Field(..., description="(Required) Field name.")
-    type: str = Field(..., description="(Required) Aggregation type (e.g., date_histogram, terms).")
-    label: str | None = Field(None, description="(Optional) Display label for the dimension. Defaults to field name.")
+    Dimensions are typically used for grouping or splitting data in visualizations.
+    """
+
+    id: str | None = Field(
+        default=None,
+        description="A unique identifier for the dimension. If not provided, one may be generated during compilation."
+    )
+    field: str = Field(
+        ..., description="The name of the field in the data view that this dimension is based on."
+    )
+    type: str = Field(
+        ..., description="The aggregation type for the dimension (e.g., 'date_histogram', 'terms', 'histogram')."
+    )
+    label: str | None = Field(
+        None, description="The display label for the dimension. If not provided, a label may be inferred from the field and type."
+    )
     interval: str | None = Field(
-        None, description="(Optional, for date_histogram or histogram) Time or number interval."
-    )  # Updated description
-    size: int | None = Field(None, description="(Optional, for terms) Number of terms to show.")
-    sort: Sort | None = Field(None, description="(Optional, for terms) Sort configuration for the terms.")
-    other_bucket: bool | None = Field(None, description="(Optional, for terms) Show 'Other' bucket.")  # Added other_bucket
-    missing_bucket: bool | None = Field(None, description="(Optional, for terms) Show 'Missing' bucket.")  # Added missing_bucket
-    include: list[str] | None = Field(None, description="(Optional, for terms) Include terms matching these values/regex.")  # Added include
-    exclude: list[str] | None = Field(None, description="(Optional, for terms) Exclude terms matching these values/regex.")  # Added exclude
+        None, description="For 'date_histogram' or 'histogram' aggregations, the time or number interval."
+    )
+    size: int | None = Field(
+        None, description="For 'terms' aggregation, the number of top terms to display."
+    )
+    sort: Sort | None = Field(
+        None, description="For 'terms' aggregation, the sort configuration for the terms."
+    )
+    other_bucket: bool | None = Field(
+        None, description="For 'terms' aggregation, if `true`, show a bucket for terms not included in the top size. Defaults to `false`."
+    )
+    missing_bucket: bool | None = Field(
+        None, description="For 'terms' aggregation, if `true`, show a bucket for documents with a missing value for the field. Defaults to `false`."
+    )
+    include: list[str] | None = Field(
+        None, description="For 'terms' aggregation, a list of terms to include. Can be used with or without `include_is_regex`."
+    )
+    exclude: list[str] | None = Field(
+        None, description="For 'terms' aggregation, a list of terms to exclude. Can be used with or without `exclude_is_regex`."
+    )
     include_is_regex: bool | None = Field(
-        None, description="(Optional, for terms) Treat include values as regex."
-    )  # Added include_is_regex
+        None, description="For 'terms' aggregation, if `true`, treat the values in the `include` list as regular expressions. Defaults to `false`."
+    )
     exclude_is_regex: bool | None = Field(
-        None, description="(Optional, for terms) Treat exclude values as regex."
-    )  # Added exclude_is_regex
+        None, description="For 'terms' aggregation, if `true`, treat the values in the `exclude` list as regular expressions. Defaults to `false`."
+    )

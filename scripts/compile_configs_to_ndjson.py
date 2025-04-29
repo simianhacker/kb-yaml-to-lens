@@ -104,7 +104,7 @@ def main():
     # Create the output directory if it doesn't exist
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    scenarios = [*get_inputs()]  # *get_scenarios()] #
+    scenarios = [*get_scenarios()]
 
     ndjson_lines = []
 

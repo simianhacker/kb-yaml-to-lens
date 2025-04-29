@@ -2,14 +2,33 @@ from pydantic import BaseModel, Field
 
 
 class Metric(BaseModel):
-    """Represents a metric object within a Lens chart in the YAML schema."""
+    """
+    Represents a metric configuration within a Lens chart in the YAML schema.
 
-    id: str = Field(default=None, description="(Optional) Unique identifier for the metric.")
-    type: str = Field(..., description="(Required) Aggregation type (e.g., count, max, average, unique_count, formula, last_value).")
-    label: str | None = Field(None, description="(Optional) Display label for the metric. Defaults to standard label (e.g., 'Count').")
-    field: str | None = Field(
-        None, description="(Optional, required for most types except count) Field name. Use '___records___' for count."
+    Metrics are typically used for calculating and displaying quantitative values
+    in visualizations.
+    """
+
+    id: str | None = Field(
+        default=None,
+        description="A unique identifier for the metric. If not provided, one may be generated during compilation."
     )
-    formula: str | None = Field(None, description="(Optional, for type: formula) The formula string.")
-    sort_field: str | None = Field(None, description="(Optional, for last_value) Field to determine the 'last' value.")
-    filter: str | None = Field(None, description="(Optional, for last_value) KQL filter applied before taking the last value.")
+    type: str = Field(
+        ..., description="The aggregation type for the metric (e.g., 'count', 'max', 'average', 'unique_count', 'formula', 'last_value')."
+    )
+    label: str | None = Field(
+        None, description="The display label for the metric. If not provided, a label may be inferred from the type and field."
+    )
+    field: str | None = Field(
+        None,
+        description="The name of the field in the data view that this metric is based on. Required for most metric types except 'count'. Use '___records___' for a count of documents."
+    )
+    formula: str | None = Field(
+        None, description="For 'formula' type metrics, the formula string to be evaluated."
+    )
+    sort_field: str | None = Field(
+        None, description="For 'last_value' aggregation, the field used to determine the 'last' value."
+    )
+    filter: str | None = Field(
+        None, description="For 'last_value' aggregation, a KQL filter applied before determining the last value."
+    )

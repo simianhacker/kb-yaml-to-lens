@@ -9,69 +9,109 @@ from dashboard_compiler.models.config.panels.lens_charts.base import (
     LensLegendFormat,
 )
 from dashboard_compiler.models.config.panels.lens_charts.components.dimension import Dimension
-from dashboard_compiler.models.config.panels.lens_charts.components.metric import Metric  # Import Metric
+from dashboard_compiler.models.config.panels.lens_charts.components.metric import Metric
 
 
 class LensBottomAxisFormat(BaseLensAxisFormat):
-    """Model for bottom axis formatting options."""
+    """
+    Represents formatting options for the bottom axis of an XY chart.
+    """
 
-    show_current_time_marker: bool | None = Field(None, description="Show current time marker on the bottom axis.")
+    show_current_time_marker: bool | None = Field(
+        None, description="If `true`, show a marker on the bottom axis indicating the current time. Defaults to `false`."
+    )
 
 
 class LensLeftAxisFormat(BaseLensAxisFormat):
-    """Model for left axis formatting options."""
+    """
+    Represents formatting options for the left axis of an XY chart.
+    """
 
-    pass  # Add left-specific fields if needed
+    pass
 
 
 class LensRightAxisFormat(BaseLensAxisFormat):
-    """Model for right axis formatting options."""
+    """
+    Represents formatting options for the right axis of an XY chart.
+    """
 
-    metrics: list[Metric] = Field(default_factory=list, description="List of metrics to display on the right axis.")  # Added metrics
+    metrics: list[Metric] = Field(
+        default_factory=list,
+        description="A list of metric configurations to be displayed on the right axis. Defaults to an empty list."
+    )
 
 
 class LensAxisFormat(BaseModel):
-    """Model for grouping axis formatting options."""
+    """
+    Groups formatting options for the axes of an XY chart.
+    """
 
-    bottom: LensBottomAxisFormat = Field(default_factory=LensBottomAxisFormat, description="Bottom axis formatting.")
-    left: LensLeftAxisFormat = Field(default_factory=LensLeftAxisFormat, description="Left axis formatting.")
-    right: LensRightAxisFormat | None = Field(None, description="Right axis formatting (optional).")
+    bottom: LensBottomAxisFormat = Field(
+        default_factory=LensBottomAxisFormat, description="Formatting options for the bottom axis."
+    )
+    left: LensLeftAxisFormat = Field(
+        default_factory=LensLeftAxisFormat, description="Formatting options for the left axis."
+    )
+    right: LensRightAxisFormat | None = Field(
+        None, description="Formatting options for the right axis (optional)."
+    )
 
 
 class LensXYChart(BaseLensChart):
-    """Represents a Bar/Line/Area chart definition within a Lens panel in the YAML schema."""
+    """
+    Represents a Bar, Line, or Area chart configuration within a Lens panel in the YAML schema.
+    """
 
-    type: Literal["bar", "area", "line"] = "bar"
-    mode: Literal["stacked", "unstacked", "percentage"] = Field("unstacked", description="Stacking mode for bar and area charts.")
-    dimensions: list[Dimension] = Field(
-        ..., description="(Required) Defines the axes (usually x-axis or split/breakdown dimensions).", min_length=1
+    type: Literal["bar", "area", "line"] = Field(
+        "bar", description="The type of XY chart to display. Defaults to 'bar'."
     )
-    metrics: list[Metric] = Field(..., description="(Required) Defines the values (usually y-axis).", min_length=1)
+    mode: Literal["stacked", "unstacked", "percentage"] = Field(
+        "unstacked", description="The stacking mode for bar and area charts. Defaults to 'unstacked'."
+    )
+    dimensions: list[Dimension] = Field(
+        ...,
+        description="Defines the dimensions (typically the x-axis or split/breakdown) for the chart.",
+        min_length=1
+    )
+    metrics: list[Metric] = Field(
+        ...,
+        description="Defines the metrics (typically the y-axis values) for the chart.",
+        min_length=1
+    )
 
-    axis: LensAxisFormat = Field(default_factory=LensAxisFormat, description="Axis formatting options.")
-    legend: LensLegendFormat = Field(default_factory=LensLegendFormat, description="Legend formatting options.")
-    appearance: LensAppearanceFormat = Field(default_factory=LensAppearanceFormat, description="Chart appearance options.")
+    axis: LensAxisFormat = Field(
+        default_factory=LensAxisFormat, description="Formatting options for the chart's axes."
+    )
+    legend: LensLegendFormat = Field(
+        default_factory=LensLegendFormat, description="Formatting options for the chart's legend."
+    )
+    appearance: LensAppearanceFormat = Field(
+        default_factory=LensAppearanceFormat, description="Appearance options for the chart."
+    )
 
     @model_validator(mode="after")
     def check_mode_for_chart_type(self) -> "LensXYChart":
-        # if self.mode is not None and self.type not in ["bar", "area"]:
-        #    raise ValueError("Mode can only be specified for 'bar' or 'area' chart types.")
+        """
+        Validates that the 'mode' field is only used for 'bar' or 'area' chart types.
+        """
+        if self.mode is not None and self.type not in ["bar", "area"]:
+           raise ValueError("Mode can only be specified for 'bar' or 'area' chart types.")
         return self
 
     def add_dimension(self, dimension: Dimension) -> None:
         """
-        Add a dimension to the chart.
+        Adds a dimension to the chart's dimensions list.
 
         Args:
-            dimension (Dimension): The dimension to add.
+            dimension (Dimension): The dimension object to add.
         """
         self.dimensions.append(dimension)
 
     def add_metric(self, metric: Metric) -> None:
         """
-        Add a metric to the chart.
+        Adds a metric to the chart's metrics list.
 
         Args:
-            metric (Metric): The metric to add.
+            metric (Metric): The metric object to add.
         """
         self.metrics.append(metric)

@@ -6,37 +6,58 @@ from dashboard_compiler.models.config.panels.base import BasePanel
 
 
 class BaseLink(BaseModel):
-    """Represents a link object within a Links panel in the YAML schema."""
+    """
+    Base class for defining link objects within a Links panel in the YAML schema.
 
-    label: str | None = Field(None, description="(Optional) Display text for the link.")
+    Specific link types (e.g., DashboardLink, UrlLink) inherit from this base class.
+    """
+
+    label: str | None = Field(
+        None, description="The display text for the link. If not provided, a label may be inferred."
+    )
 
 
 class DashboardLink(BaseLink):
-    """Represents a link object within a Links panel in the YAML schema."""
+    """
+    Represents a link to another dashboard or saved object within a Links panel.
+    """
 
-    dashboard: str | None = Field(None, description="(Optional) ID of dashboard or other object for dashboardLink.")
+    dashboard: str = Field(
+        ..., description="The ID of the target dashboard or saved object."
+    )
 
 
 class UrlLink(BaseLink):
-    """Represents a link object within a Links panel in the YAML schema."""
+    """
+    Represents a link to an external URL within a Links panel.
+    """
 
-    url: str | None = Field(None, description="(Optional) URL for urlLink.")
+    url: str = Field(
+        ..., description="The URL that the link points to."
+    )
 
 
 class LinksPanel(BasePanel):
-    """Represents a Links panel in the YAML schema."""
+    """
+    Represents a Links panel configuration in the YAML schema.
+
+    Links panels are used to display a collection of links to other dashboards,
+    saved objects, or external URLs.
+    """
 
     type: Literal["links"] = "links"
-    layout: Literal["horizontal", "vertical"] | None = Field(
-        "horizontal", description="(Optional) Layout of the links (e.g., horizontal, vertical)."
+    layout: Literal["horizontal", "vertical"] = Field(
+        "horizontal", description="The layout direction of the links within the panel. Defaults to 'horizontal'."
     )
-    links: list[DashboardLink | UrlLink] = Field(..., description="(Required) List of link objects.")
+    links: list[DashboardLink | UrlLink] = Field(
+        ..., description="A list of link objects to be displayed in the panel."
+    )
 
     def add_link(self, link: DashboardLink | UrlLink) -> None:
         """
-        Add a link to the Links panel.
+        Adds a link object to the Links panel's links list.
 
         Args:
-            link (DashboardLink | UrlLink): The link to add.
+            link (DashboardLink | UrlLink): The link object to add.
         """
         self.links.append(link)

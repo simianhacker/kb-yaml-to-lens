@@ -44,6 +44,7 @@ class KbnLayerDataSourceState(BaseModel):
     sampling: int
     indexPatternId: str | None = None
 
+
 class KbnLayerDataSourceStateById(RootModel):
     """Represents a mapping of layer IDs to their corresponding KbnLayerDataSourceState objects."""
 
@@ -53,6 +54,7 @@ class KbnLayerDataSourceStateById(RootModel):
 class KbnFormBasedDataSourceState(BaseModel):
     layers: KbnLayerDataSourceStateById = Field(default_factory=lambda: KbnLayerDataSourceStateById())
     currentIndexPatternId: str | None = None
+
 
 class KbnTextBasedDataSourceState(BaseModel):
     layers: KbnLayerDataSourceStateById = Field(default_factory=lambda: KbnLayerDataSourceStateById())

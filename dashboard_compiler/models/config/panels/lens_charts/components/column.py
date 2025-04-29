@@ -1,15 +1,39 @@
+from typing import Literal
+
 from pydantic import BaseModel, Field
 
 
 class Column(BaseModel):
-    """Represents a column object within a Lens table chart in the YAML schema."""
+    """
+    Represents a column configuration within a Lens Datatable chart in the YAML schema.
+    """
 
-    id: str = Field(default=None, description="(Optional) Unique identifier for the metric.")
-    field: str | None = Field(None, description="(Required for dimension/metric columns) Field name. Use '___records___' for count.")
-    type: str = Field(..., description="(Required) Aggregation type (e.g., terms, count, last_value, max, average).")
-    label: str | None = Field(None, description="(Optional) Display label for the column.")
-    size: int | None = Field(None, description="(Optional, for terms) Number of terms to show.")
-    order_by_metric: str | None = Field(None, description="(Optional, for terms) Label of the metric column to sort this term column by.")
-    order_direction: str = Field("desc", description="(Optional, for terms) Sort direction: 'asc' or 'desc'. Defaults to 'desc'.")
-    sort_field: str | None = Field(None, description="(Optional, for last_value) Field to determine the 'last' value.")
-    filter: str | None = Field(None, description="(Optional, for last_value) KQL filter applied before taking the last value.")
+    id: str | None = Field(
+        default=None,
+        description="A unique identifier for the column. If not provided, one may be generated during compilation."
+    )
+    field: str | None = Field(
+        None,
+        description="The name of the field in the data view that this column is based on. Required for dimension and metric columns. Use '___records___' for a count of documents."
+    )
+    type: str = Field(
+        ..., description="The aggregation type for the column (e.g., 'terms', 'count', 'last_value', 'max', 'average')."
+    )
+    label: str | None = Field(
+        None, description="The display label for the column header. If not provided, a label may be inferred from the field and type."
+    )
+    size: int | None = Field(
+        None, description="For 'terms' aggregation, the number of top terms to display."
+    )
+    order_by_metric: str | None = Field(
+        None, description="For 'terms' aggregation, the label of a metric column to use for sorting the terms."
+    )
+    order_direction: Literal["asc", "desc"] = Field(
+        "desc", description="For 'terms' aggregation, the sort direction ('asc' or 'desc'). Defaults to 'desc'."
+    )
+    sort_field: str | None = Field(
+        None, description="For 'last_value' aggregation, the field used to determine the 'last' value."
+    )
+    filter: str | None = Field(
+        None, description="For 'last_value' aggregation, a KQL filter applied before determining the last value."
+    )

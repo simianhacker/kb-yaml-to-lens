@@ -6,51 +6,68 @@ from dashboard_compiler.models.config.shared import ExistsFilter, KqlQuery, Luce
 
 
 class Dashboard(BaseModel):
-    """Represents the top-level dashboard object in the YAML schema."""
+    """
+    Represents the top-level dashboard configuration in the YAML schema.
 
-    id: str | None = Field(default=None, description="Unique identifier for the dashboard.")
-    title: str = Field(..., description="(Required) The title of the dashboard.")
-    description: str = Field("", description="(Optional) A description for the dashboard. Defaults to ''.")
+    This model defines the structure for an entire dashboard, including its
+    metadata, global query and filters, controls, and the list of panels
+    it contains.
+    """
+
+    id: str | None = Field(
+        default=None,
+        description="A unique identifier for the dashboard. If not provided, one may be generated during compilation."
+    )
+    title: str = Field(
+        ..., description="The title of the dashboard, displayed at the top of the page."
+    )
+    description: str = Field(
+        "", description="A brief description of the dashboard's purpose or content. Defaults to an empty string."
+    )
 
     query: KqlQuery | LuceneQuery = Field(
-        default_factory=KqlQuery, description="(Optional) A query string to filter the dashboard data. Defaults to an empty string."
+        default_factory=KqlQuery,
+        description="A global query string (KQL or Lucene) applied to all panels on the dashboard unless overridden at the panel level. Defaults to an empty KQL query."
     )
 
     filters: list[ExistsFilter | PhraseFilter | PhrasesFilter | RangeFilter] = Field(
-        default_factory=list, description="(Optional) A list of filters to apply to the dashboard. Can be empty."
+        default_factory=list,
+        description="A list of global filters applied to all panels on the dashboard unless overridden at the panel level. Can be empty."
     )
 
     controls: list[RangeSliderControl | OptionsListControl] = Field(
-        default_factory=list, description="(Optional) A list of controls panels for the dashboard. Can be empty."
+        default_factory=list,
+        description="A list of control panel configurations for the dashboard. These controls can interact with dashboard filters or queries. Can be empty."
     )
 
     panels: list[MarkdownPanel | SearchPanel | LinksPanel | LensPanel] = Field(
-        default_factory=list, description="(Required) A list of panel objects defining the dashboard content. Can be empty."
+        default_factory=list,
+        description="A list of panel objects defining the content and layout of the dashboard. This field is required but the list can be empty."
     )
 
     def add_filter(self, filter: ExistsFilter | PhraseFilter | PhrasesFilter | RangeFilter) -> None:
         """
-        Add a filter to the dashboard.
+        Adds a filter to the dashboard's global filters list.
 
         Args:
-            filter (ExistsFilter | PhraseFilter | PhrasesFilter | RangeFilter): The filter to add.
+            filter (ExistsFilter | PhraseFilter | PhrasesFilter | RangeFilter): The filter object to add.
         """
         self.filters.append(filter)
 
     def add_control(self, control: RangeSliderControl | OptionsListControl) -> None:
         """
-        Add a control to the dashboard.
+        Adds a control panel configuration to the dashboard's controls list.
 
         Args:
-            control (RangeSliderControl | OptionsListControl): The control to add.
+            control (RangeSliderControl | OptionsListControl): The control object to add.
         """
         self.controls.append(control)
 
     def add_panel(self, panel: MarkdownPanel | SearchPanel | LinksPanel | LensPanel) -> None:
         """
-        Add a panel to the dashboard.
+        Adds a panel object to the dashboard's panels list.
 
         Args:
-            panel (MarkdownPanel | SearchPanel | LinksPanel | LensPanel): The panel to add.
+            panel (MarkdownPanel | SearchPanel | LinksPanel | LensPanel): The panel object to add.
         """
         self.panels.append(panel)

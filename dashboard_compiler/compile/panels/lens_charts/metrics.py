@@ -2,8 +2,8 @@ from dashboard_compiler.compile.utils import stable_id_generator
 from dashboard_compiler.models.config.panels.lens_charts.metrics import LensMetricsChart
 from dashboard_compiler.models.views.panels.lens import KbnColumn
 from dashboard_compiler.models.views.panels.lens_chart.metrics import (
-    KbnMetricVisualizationState,
     KbnMetricStateVisualizationLayer,
+    KbnMetricVisualizationState,
 )
 
 

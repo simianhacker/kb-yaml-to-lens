@@ -8,10 +8,20 @@ from dashboard_compiler.models.config.panels.lens_charts.components.metric impor
 
 
 class LensPieChart(BaseLensChart):
-    """Represents a Pie chart definition within a Lens panel in the YAML schema."""
+    """
+    Represents a Pie chart configuration within a Lens panel in the YAML schema.
+
+    Pie charts are used to visualize the proportion of categories.
+    """
 
     type: Literal["pie"] = "pie"
     dimensions: list[Dimension] = Field(
-        ..., description="(Required) Defines the 'Slice by' dimension. Usually one 'terms' aggregation.", max_length=1
+        ...,
+        description="Defines the 'Slice by' dimension for the pie chart. Typically, this is a single 'terms' aggregation.",
+        max_length=1
     )
-    metrics: list[Metric] = Field(..., description="(Required) Defines the 'Size by' metric. Usually one metric.", max_length=1)
+    metrics: list[Metric] = Field(
+        ...,
+        description="Defines the 'Size by' metric for the pie chart. Typically, this is a single metric.",
+        max_length=1
+    )

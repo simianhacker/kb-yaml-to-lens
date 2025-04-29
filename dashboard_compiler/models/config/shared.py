@@ -4,74 +4,132 @@ from pydantic import BaseModel, Field
 
 
 class Sort(BaseModel):
-    """Represents the sort configuration for a control in the YAML schema."""
+    """
+    Represents the sort configuration used in various parts of the YAML schema,
+    such as sorting options in controls or terms in Lens charts.
+    """
 
-    by: str = Field(..., description="(Required) Field to sort by.")
-    direction: Literal["asc", "desc"] = Field(..., description="(Required) Sort direction ('asc' or 'desc').")
-
-
-class BaseFilter(BaseModel):
-    """Base class for filter configurations in the YAML schema."""
-
-    field: str = Field(..., description="(Required) Field to filter by.")
-    # type: Literal["phrase", "phrases"] = Field(..., description="(Required) Filter type.")
-
-
-class ExistsFilter(BaseFilter):
-    """Represents an exists filter configuration for a control in the YAML schema."""
-
-    exists: bool = Field(..., description="(Required) Indicates whether the field must exist or not.")
-
-
-class PhraseFilter(BaseFilter):
-    """Represents a phrase filter configuration for a control in the YAML schema."""
-
-    equals: str = Field(..., description="(Required) Phrase value to filter on.")
-
-
-class PhrasesFilter(BaseFilter):
-    """Represents a phrases filter configuration for a control in the YAML schema."""
-
-    in_list: list[str] = Field(..., alias="in", description="(Required) List of phrases to filter on.")
-
-
-class RangeFilter(BaseFilter):
-    """Represents a range filter configuration for a control in the YAML schema."""
-
-    gte: str | None = Field(None, description="(Optional) Greater than or equal to value for range filters.")
-    lte: str | None = Field(None, description="(Optional) Less than or equal to value for range filters.")
-    lt: str | None = Field(None, description="(Optional) Less than value for range filters.")
-    gt: str | None = Field(None, description="(Optional) Greater than value for range filters.")
-
-
-class NegationFilter(BaseModel):
-    """Represents a negated filter configuration for a control in the YAML schema."""
-
-    not_filter: PhraseFilter | PhrasesFilter | RangeFilter = Field(
-        ..., alias="not", description="(Required) Filter to negate. Can be a phrase, phrases, or range filter."
+    by: str = Field(
+        ..., description="The field name to sort the data by."
+    )
+    direction: Literal["asc", "desc"] = Field(
+        ..., description="The sort direction. Must be either 'asc' for ascending or 'desc' for descending."
     )
 
 
-class Filter(BaseModel):
-    """Represents a filter configuration for a control in the YAML schema."""
+class BaseFilter(BaseModel):
+    """
+    Base class for defining filter configurations in the YAML schema.
 
-    field: str = Field(..., description="(Required) Field to filter by.")
-    type: Literal["exists", "phrase", "phrases", "range"]
-    value: str = Field(..., description="(Required) Value to filter on.")
-    operator: Literal["equals", "contains", "startsWith", "endsWith"] = Field(..., description="(Required) Filter operator.")
+    Specific filter types (e.g., exists, phrase, range) inherit from this base class.
+    """
+
+    field: str = Field(
+        ..., description="The name of the field to apply the filter to."
+    )
+
+
+class ExistsFilter(BaseFilter):
+    """
+    Represents an 'exists' filter configuration in the YAML schema.
+
+    This filter checks for the existence or non-existence of a specific field.
+    """
+
+    exists: bool = Field(
+        ..., description="If `true`, the field must exist. If `false`, the field must not exist."
+    )
+
+
+class PhraseFilter(BaseFilter):
+    """
+    Represents a 'phrase' filter configuration in the YAML schema.
+
+    This filter matches documents where a specific field contains an exact phrase.
+    """
+
+    equals: str = Field(
+        ..., description="The exact phrase value that the field must match."
+    )
+
+
+class PhrasesFilter(BaseFilter):
+    """
+    Represents a 'phrases' filter configuration in the YAML schema.
+
+    This filter matches documents where a specific field contains one or more
+    of the specified phrases.
+    """
+
+    in_list: list[str] = Field(
+        ..., alias="in", description="A list of phrases. Documents must match at least one of these phrases in the specified field."
+    )
+
+
+class RangeFilter(BaseFilter):
+    """
+    Represents a 'range' filter configuration in the YAML schema.
+
+    This filter matches documents where a numeric or date field falls within a specified range.
+    """
+
+    gte: str | None = Field(
+        None, description="Greater than or equal to value for the range filter."
+    )
+    lte: str | None = Field(
+        None, description="Less than or equal to value for the range filter."
+    )
+    lt: str | None = Field(
+        None, description="Less than value for the range filter."
+    )
+    gt: str | None = Field(
+        None, description="Greater than value for the range filter."
+    )
+
+
+class NegationFilter(BaseModel):
+    """
+    Represents a negated filter configuration in the YAML schema.
+
+    This allows for excluding documents that match the nested filter.
+    """
+
+    not_filter: ExistsFilter | PhraseFilter | PhrasesFilter | RangeFilter = Field(
+        ..., alias="not", description="The filter to negate. Can be a phrase, phrases, or range filter."
+    )
 
 
 class BaseQuery(BaseModel):
-    """Represents a query configuration for a control in the YAML schema."""
+    """
+    Base class for defining query configurations in the YAML schema.
+
+    Specific query types (e.g., KQL, Lucene) inherit from this base class.
+    """
+    # No common fields needed at this level currently.
+    pass
 
 
 class KqlQuery(BaseQuery):
-    """Represents a KQL query configuration for a control in the YAML schema."""
+    """
+    Represents a KQL (Kibana Query Language) query configuration.
 
-    kql: str = Field(default="", description="(Required) Query string to filter by.")
+    KQL is the default query language in Kibana and provides a simplified syntax
+    for filtering data.
+    """
+
+    kql: str = Field(
+        default="", description="The KQL query string to filter data."
+    )
 
 
 class LuceneQuery(BaseQuery):
-    """Represents a Lucene query configuration for a control in the YAML schema."""
+    """
+    Represents a Lucene query configuration.
 
-    lucene: str = Field(default="", description="(Required) Query string to filter by.")
+    Lucene provides a more powerful and flexible syntax for querying data
+    compared to KQL.
+    """
+
+    lucene: str = Field(
+        default="", description="The Lucene query string to filter data."
+    )

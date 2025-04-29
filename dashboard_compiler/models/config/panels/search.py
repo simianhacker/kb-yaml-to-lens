@@ -6,7 +6,13 @@ from dashboard_compiler.models.config.panels.base import BasePanel
 
 
 class SearchPanel(BasePanel):
-    """Represents a Search panel in the YAML schema."""
+    """
+    Represents a Search panel configuration in the YAML schema.
+
+    Search panels are used to display the results of a saved Kibana search.
+    """
 
     type: Literal["search"] = "search"
-    saved_search_id: str = Field(..., description="(Required) The ID of the Kibana saved search object.")
+    saved_search_id: str = Field(
+        ..., description="The ID of the saved Kibana search object to display in the panel."
+    )

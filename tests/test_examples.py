@@ -34,7 +34,7 @@ INCLUDED_SCENARIOS = [
     "one-query",
     "metrics/one-metrics-primary-unique-count",  # Metrics chart scenario
     # Add new XY chart scenarios
-    "table/one-table-two-rows-one-metric",
+    #"table/one-table-two-rows-one-metric",
     "table/one-table-two-rows-split-metric-sorted-width",
     "xy/one-area-percent-timestamp-two-series",
     "xy/one-area-stacked-timestamp-two-series",

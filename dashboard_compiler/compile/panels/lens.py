@@ -105,8 +105,8 @@ def compile_lens_panel(panel: LensPanel) -> tuple[list[KbnReference], KbnLensPan
     layer_id = getattr(state_visualization, "layerId", None) or next(iter(state_visualization.layers)).layerId
 
     layer_data_source_state = KbnLayerDataSourceState(
-        columns={**split_by_by_id,**rows_by_id, **dimensions_by_id,  **metrics_by_id },
-        columnOrder=list(split_by_by_id.keys()) + list(rows_by_id.keys()) + list(dimensions_by_id.keys())+ list(metrics_by_id.keys()),
+        columns={**split_by_by_id, **rows_by_id, **dimensions_by_id, **metrics_by_id},
+        columnOrder=list(split_by_by_id.keys()) + list(rows_by_id.keys()) + list(dimensions_by_id.keys()) + list(metrics_by_id.keys()),
         incompleteColumns={},
         sampling=1,  # Default based on sample
         indexPatternId=panel.index_pattern,

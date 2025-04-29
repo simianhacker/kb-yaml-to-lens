@@ -87,24 +87,6 @@ class XYByReferenceAnnotationLayerConfig(BaseModel):
     annotationGroupId: str
     __lastSaved: Any  # Use Any for now, refine if needed
 
-
-class ValidXYDataLayerConfig(BaseModel):
-    xAccessor: str
-    layerId: str
-    accessors: list[str]
-    layerType: Literal["data"]
-    seriesType: SeriesType
-    simpleView: bool | None = None
-    yConfig: list[YConfig] | None = None
-    splitAccessor: str | None = None
-    palette: Any | None = None  # Use Any for now, refine if needed
-    collapseFn: Literal["sum"] | Literal["avg"] | Literal["min"] | Literal["max"] | None = None
-    xScaleType: Any | None = None  # Use Any for now, refine if needed
-    isHistogram: bool | None = None
-    columnToLabel: str | None = None
-    colorMapping: Any | None = None  # Use Any for now, refine if needed
-
-
 # Subclass Kbnfor XY visualizations state (JSON structure)
 class KbnXYVisualizationState(KbnBaseStateVisualization):
     """Represents the 'visualization' object for XY charts (bar, line, area) in the Kibana JSON structure."""
