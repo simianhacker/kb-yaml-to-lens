@@ -39,6 +39,7 @@
               "adHocDataViews": {},
               "datasourceStates": {
                 "formBased": {
+                  "currentIndexPatternId": "metrics-*",
                   "layers": {
                     "d4b6506d-f2d9-4cbc-8db1-83e6a60b7976": {
                       "columnOrder": [
@@ -46,6 +47,7 @@
                       ],
                       "columns": {
                         "a8c13c5f-ee3f-487e-b6db-bb49583e7922": {
+                          "customLabel": true,
                           "dataType": "number",
                           "isBucketed": false,
                           "label": "Aerospike Namespaces",
@@ -58,6 +60,7 @@
                         }
                       },
                       "incompleteColumns": {},
+                      "indexPatternId": "metrics-*",
                       "sampling": 1
                     }
                   }
@@ -85,19 +88,7 @@
             "type": "lens",
             "visualizationType": "lnsMetric"
           },
-          "enhancements": {
-            "dynamicActions": {
-              "events": []
-            }
-          },
-          "filters": [],
-          "query": {
-            "language": "kuery",
-            "query": ""
-          },
-          "syncColors": false,
-          "syncCursor": true,
-          "syncTooltips": false
+          "enhancements": {}
         },
         "gridData": {
           "h": 15,

@@ -1,10 +1,9 @@
-
 from dashboard_compiler.compile.utils import stable_id_generator
 from dashboard_compiler.models.config.panels.lens_charts.metrics import LensMetricsChart
 from dashboard_compiler.models.views.panels.lens import KbnColumn
 from dashboard_compiler.models.views.panels.lens_chart.metrics import (
-    KbnLensMetricsVisualizationState,
-    KbnMetricsStateVisualizationLayer,
+    KbnMetricVisualizationState,
+    KbnMetricStateVisualizationLayer,
 )
 
 
@@ -13,7 +12,7 @@ def compile_lens_metrics_chart(
     index_pattern: str,
     metrics_by_id: dict[str, KbnColumn],
     metrics_by_name: dict[str, str],
-) -> tuple[KbnLensMetricsVisualizationState, str]:
+) -> tuple[KbnMetricVisualizationState, str]:
     """
     Compile a LensMetricsChart config object into a Kibana Lens Metric visualization state.
 
@@ -36,8 +35,8 @@ def compile_lens_metrics_chart(
         # This should not happen if compile_metrics was successful and chart.metrics is not empty
         raise ValueError(f"Could not find compiled ID for primary metric: {primary_metric_label}")
 
-    kbn_layer_visualization = KbnMetricsStateVisualizationLayer(layerId=layer_id, metricAccessor=primary_metric_id)
+    kbn_layer_visualization = KbnMetricStateVisualizationLayer(layerId=layer_id, metricAccessor=primary_metric_id)
 
-    kbn_state_visualization = KbnLensMetricsVisualizationState(layers=[kbn_layer_visualization])
+    kbn_state_visualization = KbnMetricVisualizationState(layers=[kbn_layer_visualization])
 
     return kbn_state_visualization

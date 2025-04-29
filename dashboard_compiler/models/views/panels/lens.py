@@ -24,7 +24,7 @@ from dashboard_compiler.models.views.base import KbnBasePanel, KbnBasePanelEmbed
 class KbnColumn(BaseModel):
     """Represents a column definition within KbnDataSourceStates.formBased.layers.<layerId>.columns in the Kibana JSON structure."""
 
-    label: str
+    label: str | None = None
     dataType: str
     customLabel: bool | None = None
     operationType: str
@@ -42,7 +42,7 @@ class KbnLayerDataSourceState(BaseModel):
     columnOrder: list[str] = Field(default_factory=list)
     incompleteColumns: dict[str, Any] = Field(default_factory=dict)
     sampling: int
-
+    indexPatternId: str | None = None
 
 class KbnLayerDataSourceStateById(RootModel):
     """Represents a mapping of layer IDs to their corresponding KbnLayerDataSourceState objects."""
@@ -52,7 +52,7 @@ class KbnLayerDataSourceStateById(RootModel):
 
 class KbnFormBasedDataSourceState(BaseModel):
     layers: KbnLayerDataSourceStateById = Field(default_factory=lambda: KbnLayerDataSourceStateById())
-
+    currentIndexPatternId: str | None = None
 
 class KbnTextBasedDataSourceState(BaseModel):
     layers: KbnLayerDataSourceStateById = Field(default_factory=lambda: KbnLayerDataSourceStateById())
@@ -65,8 +65,8 @@ class KbnIndexPatternDataSourceState(BaseModel):
 class KbnDataSourceState(BaseModel):
     """Represents the overall datasource states for a Lens panel in the Kibana JSON structure."""
 
-    formBased: KbnIndexPatternDataSourceState = Field(
-        default_factory=KbnIndexPatternDataSourceState
+    formBased: KbnFormBasedDataSourceState = Field(
+        default_factory=KbnFormBasedDataSourceState
     )  # Structure: formBased -> layers -> {layerId: KbnLayerDataSourceState}
     indexpattern: KbnIndexPatternDataSourceState = Field(
         default_factory=KbnIndexPatternDataSourceState
@@ -108,7 +108,7 @@ class KbnBaseStateVisualizationLayer(BaseModel):
 
 class KbnBaseStateVisualization(BaseModel):
     # Removed shape field
-    layers: list[KbnBaseStateVisualizationLayer] = Field(default_factory=list)
+    layers: list[KbnBaseStateVisualizationLayer] | None = Field(None)
 
 
 class KbnLensPanelState(BaseModel):
@@ -124,7 +124,7 @@ class KbnLensPanelState(BaseModel):
 
 class KbnLensPanelAttributes(BaseModel):
     title: str = ""
-    visualizationType: Literal["lnsXY", "lnsPie", "lnsMetric"]
+    visualizationType: Literal["lnsXY", "lnsPie", "lnsMetric", "lnsDatatable"]
     type: Literal["lens"] = "lens"
     references: list[KbnReference] = Field(default_factory=list)
     state: KbnLensPanelState
@@ -132,26 +132,26 @@ class KbnLensPanelAttributes(BaseModel):
 
 class KbnLensPanelEmbeddableConfig(KbnBasePanelEmbeddableConfig):
     attributes: KbnLensPanelAttributes
-    syncColors: bool = Field(
-        default=False,
-        description="(Optional) Whether to sync colors across visualizations. Defaults to False.",
-    )
-    syncCursor: bool = Field(
-        default=True,
-        description="(Optional) Whether to sync cursor across visualizations. Defaults to True.",
-    )
-    syncTooltips: bool = Field(
-        default=False,
-        description="(Optional) Whether to sync tooltips across visualizations. Defaults to False.",
-    )
-    filters: list = Field(
-        default_factory=list,
-        description="(Optional) List of filters applied to the Lens visualization. Defaults to empty list.",
-    )
-    query: dict[str, Any] = Field(
-        default_factory=lambda: {"query": "", "language": "kuery"},
-        description="(Optional) Query object for the Lens visualization. Defaults to empty query with 'kuery' language.",
-    )
+    # syncColors: bool = Field(
+    #     default=False,
+    #     description="(Optional) Whether to sync colors across visualizations. Defaults to False.",
+    # )
+    # syncCursor: bool = Field(
+    #     default=True,
+    #     description="(Optional) Whether to sync cursor across visualizations. Defaults to True.",
+    # )
+    # syncTooltips: bool = Field(
+    #     default=False,
+    #     description="(Optional) Whether to sync tooltips across visualizations. Defaults to False.",
+    # )
+    # filters: list = Field(
+    #     default_factory=list,
+    #     description="(Optional) List of filters applied to the Lens visualization. Defaults to empty list.",
+    # )
+    # query: dict[str, Any] = Field(
+    #     default_factory=lambda: {"query": "", "language": "kuery"},
+    #     description="(Optional) Query object for the Lens visualization. Defaults to empty query with 'kuery' language.",
+    # )
 
 
 class KbnLensPanel(KbnBasePanel):

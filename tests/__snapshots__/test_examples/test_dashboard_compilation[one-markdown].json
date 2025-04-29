@@ -27,11 +27,7 @@
     "panelsJSON": [
       {
         "embeddableConfig": {
-          "enhancements": {
-            "dynamicActions": {
-              "events": []
-            }
-          },
+          "enhancements": {},
           "savedVis": {
             "data": {
               "aggs": [],

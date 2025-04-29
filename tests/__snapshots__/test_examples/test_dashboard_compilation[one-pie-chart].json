@@ -39,6 +39,7 @@
               "adHocDataViews": {},
               "datasourceStates": {
                 "formBased": {
+                  "currentIndexPatternId": "metrics-*",
                   "layers": {
                     "21cb2847-7b10-404e-9672-4ee2f2beca6e": {
                       "columnOrder": [
@@ -52,17 +53,17 @@
                           "label": "Top 5 values of aerospike.namespace",
                           "operationType": "terms",
                           "params": {
-                            "exclude": null,
-                            "excludeIsRegex": null,
-                            "include": null,
-                            "includeIsRegex": null,
-                            "missingBucket": null,
+                            "exclude": [],
+                            "excludeIsRegex": false,
+                            "include": [],
+                            "includeIsRegex": false,
+                            "missingBucket": false,
                             "orderBy": {
                               "columnId": "fadbe80d-a574-4ab6-80c0-3bfe4c4e6d33",
                               "type": "column"
                             },
                             "orderDirection": "desc",
-                            "otherBucket": null,
+                            "otherBucket": true,
                             "parentFormat": {
                               "id": "terms"
                             },
@@ -72,6 +73,7 @@
                           "sourceField": "aerospike.namespace"
                         },
                         "fadbe80d-a574-4ab6-80c0-3bfe4c4e6d33": {
+                          "customLabel": true,
                           "dataType": "number",
                           "isBucketed": false,
                           "label": "Count of records",
@@ -84,6 +86,7 @@
                         }
                       },
                       "incompleteColumns": {},
+                      "indexPatternId": "metrics-*",
                       "sampling": 1
                     }
                   }
@@ -125,19 +128,7 @@
             "type": "lens",
             "visualizationType": "lnsPie"
           },
-          "enhancements": {
-            "dynamicActions": {
-              "events": []
-            }
-          },
-          "filters": [],
-          "query": {
-            "language": "kuery",
-            "query": ""
-          },
-          "syncColors": false,
-          "syncCursor": true,
-          "syncTooltips": false
+          "enhancements": {}
         },
         "gridData": {
           "h": 15,

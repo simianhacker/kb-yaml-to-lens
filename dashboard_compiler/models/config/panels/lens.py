@@ -3,6 +3,7 @@ from typing import Literal
 from pydantic import Field
 
 from dashboard_compiler.models.config.panels.base import BasePanel
+from dashboard_compiler.models.config.panels.lens_charts.datatable import LensDatatableChart
 from dashboard_compiler.models.config.panels.lens_charts.metrics import LensMetricsChart
 from dashboard_compiler.models.config.panels.lens_charts.pie import LensPieChart
 from dashboard_compiler.models.config.panels.lens_charts.xy import LensXYChart
@@ -14,7 +15,9 @@ class LensPanel(BasePanel):
 
     type: Literal["lens"] = "lens"
 
-    chart: LensXYChart | LensPieChart | LensMetricsChart = Field(..., description="(Required) Nested chart definition.")
+    chart: LensXYChart | LensPieChart | LensMetricsChart | LensDatatableChart = Field(
+        ..., description="(Required) Nested chart definition."
+    )
     index_pattern: str = Field(..., description="(Required) Index pattern used by the Lens visualization.")
     query: str = Field("", description="(Optional) Panel-specific KQL query. Defaults to ''.")
     filters: list[BaseFilter] = Field(default_factory=list, description="(Optional) Panel-specific filters. Defaults to empty list.")

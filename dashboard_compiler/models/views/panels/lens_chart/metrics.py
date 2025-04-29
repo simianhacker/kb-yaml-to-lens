@@ -5,14 +5,14 @@ from pydantic import Field, model_serializer
 from dashboard_compiler.models.views.panels.lens import KbnBaseStateVisualization, KbnBaseStateVisualizationLayer
 
 
-class KbnMetricsStateVisualizationLayer(KbnBaseStateVisualizationLayer):
+class KbnMetricStateVisualizationLayer(KbnBaseStateVisualizationLayer):
     """Represents a layer within a Metric visualization state in the Kibana JSON structure."""
 
     layerType: Literal["data"] = "data"
     metricAccessor: str = Field(..., description="The ID of the metric column.")
 
 
-class KbnLensMetricsVisualizationState(KbnBaseStateVisualization):
+class KbnMetricVisualizationState(KbnBaseStateVisualization):
     """Represents the 'visualization' object for a Metric chart in the Kibana JSON structure."""
 
     pass

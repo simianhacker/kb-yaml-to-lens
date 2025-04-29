@@ -39,6 +39,7 @@
               "adHocDataViews": {},
               "datasourceStates": {
                 "formBased": {
+                  "currentIndexPatternId": "metrics-*",
                   "layers": {
                     "94793652-40b0-4337-bf6a-8c2f7188a37c": {
                       "columnOrder": [
@@ -50,7 +51,6 @@
                         "51800b32-6dbd-483f-a95e-9b7c533fd9bb": {
                           "dataType": "number",
                           "isBucketed": false,
-                          "label": "min of aerospike.namespace.query.count",
                           "operationType": "min",
                           "params": {
                             "emptyAsNull": true
@@ -74,7 +74,6 @@
                         "c44fbd5f-413e-414a-ad6b-a0ca09727b94": {
                           "dataType": "number",
                           "isBucketed": false,
-                          "label": "count of ___records___",
                           "operationType": "count",
                           "params": {
                             "emptyAsNull": true
@@ -84,6 +83,7 @@
                         }
                       },
                       "incompleteColumns": {},
+                      "indexPatternId": "metrics-*",
                       "sampling": 1
                     }
                   }
@@ -108,7 +108,6 @@
                       "c44fbd5f-413e-414a-ad6b-a0ca09727b94",
                       "51800b32-6dbd-483f-a95e-9b7c533fd9bb"
                     ],
-                    "colorMapping": {},
                     "layerId": "94793652-40b0-4337-bf6a-8c2f7188a37c",
                     "layerType": "data",
                     "seriesType": "area_percentage_stacked",
@@ -126,19 +125,7 @@
             "type": "lens",
             "visualizationType": "lnsXY"
           },
-          "enhancements": {
-            "dynamicActions": {
-              "events": []
-            }
-          },
-          "filters": [],
-          "query": {
-            "language": "kuery",
-            "query": ""
-          },
-          "syncColors": false,
-          "syncCursor": true,
-          "syncTooltips": false
+          "enhancements": {}
         },
         "gridData": {
           "h": 15,

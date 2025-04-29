@@ -1,4 +1,3 @@
-
 import yaml
 
 from dashboard_compiler.compile.panels.lens import compile_lens_panel

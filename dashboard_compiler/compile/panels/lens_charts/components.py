@@ -16,8 +16,8 @@ def compile_metrics(metrics: list[Metric]) -> tuple[dict[str, KbnColumn], dict[s
         id = metric.id or stable_id_generator([str(i), metric.type, metric.field])
 
         metrics_by_id[id] = KbnColumn(
-            label=metric.label, #f"{metric.type} of {metric.field}",
-            customLabel=metric.label is not None,
+            label=metric.label,
+            customLabel=metric.label is not None or None,
             dataType="number",
             operationType=metric.type,
             scale="ratio",
@@ -56,22 +56,21 @@ def compile_dimensions(dimensions: list[Dimension], metrics_by_name: dict[str, s
                 # },
             }
         elif dimension.type == "terms":
-
             params = {
                 "size": dimension.size,
                 "orderBy": {"type": "column", "columnId": metrics_by_name.get(dimension.sort.by)}
                 if dimension.sort and dimension.sort.by in metrics_by_name
                 else None,
                 "orderDirection": dimension.sort.direction if dimension.sort else "asc",
-                "otherBucket": dimension.other_bucket,  # Mapped from config
-                "missingBucket": dimension.missing_bucket,  # Mapped from config
+                "otherBucket": dimension.other_bucket or True,  # Mapped from config
+                "missingBucket": dimension.missing_bucket or False,  # Mapped from config
                 "parentFormat": {
                     "id": dimension.type,
                 },
-                "include": dimension.include,  # Mapped from config
-                "exclude": dimension.exclude,  # Mapped from config
-                "includeIsRegex": dimension.include_is_regex,  # Mapped from config
-                "excludeIsRegex": dimension.exclude_is_regex,  # Mapped from config
+                "include": dimension.include or [],  # Mapped from config
+                "exclude": dimension.exclude or [],  # Mapped from config
+                "includeIsRegex": dimension.include_is_regex or False,  # Mapped from config
+                "excludeIsRegex": dimension.exclude_is_regex or False,  # Mapped from config
             }
         elif dimension.type == "histogram":  # Added histogram type
             data_type = "number"
