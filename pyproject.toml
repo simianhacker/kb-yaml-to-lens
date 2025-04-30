@@ -16,6 +16,7 @@ pytest-freezer = ">=0.4.9"
 deepdiff = ">=8.4.2"
 ruff = ">=0.11.6"
 pytest-asyncio = ">=0.26.0"
+beartype = "^0.20.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=7.0"
@@ -51,18 +52,11 @@ extend-exclude = [
 
 [tool.ruff.lint]
 # Enable recommended rules + isort
-select = [
-    "E",   # pycodestyle errors
-    "F",   # pyflakes
-    "I",   # isort
-    "B",   # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "UP",  # pyupgrade
-    "N",   # pep8-naming
-    "PL",  # pylint
-    "RUF", # ruff-specific rules
-    "W",   # pycodestyle warnings
-    "C90", # mccabe complexity
+select = ["ALL"]
+ignore = [
+    "CPY001", # No copyright notice for meee
+    "ERA001", # I like commented out code sometimes
+    "PLR6301", # Ignore functions that don't use self
 ]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
@@ -72,11 +66,23 @@ unfixable = []
 # Per-file rule ignores
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]    # Ignore unused imports in __init__.py files
-"tests/**.py" = ["PLR2004", "W505"] # Ignore magic numbers and docstring length in tests
-"dashboard_compiler/models/views/**.py" = [
+"tests/**.py" = [
+    "PLR2004", # Ignore magic numbers and docstring length in tests
+    "W505",
+    "INP001",
+    "S101", # Ignore use of assert
+    "ANN201", # Ignore missing type annotations in tests
+    "RUF029", # Ignore await not used in async function
+] 
+"dashboard_compiler/**/view.py" = [
     "N815", # Ignore casing requirements for view models
     "N803",  # Ignore lowercase arguments in view models
+    "D101", # Ignore missing docstrings in view models
 ]
+
+
+[tool.ruff.format]
+quote-style = "single" 
 
 [tool.ruff.lint.mccabe]
 max-complexity = 10

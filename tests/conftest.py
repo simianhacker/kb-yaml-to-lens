@@ -3,6 +3,11 @@ import yaml
 from syrupy.assertion import SnapshotAssertion
 from syrupy.extensions.json import JSONSnapshotExtension
 
+DEEP_DIFF_DEFAULTS = {
+    "ignore_order": True,
+    "threshold_to_diff_deeper": 0,
+    "verbose_level": 2,
+}
 
 @pytest.fixture
 def snapshot_json(snapshot: SnapshotAssertion):
@@ -15,7 +20,7 @@ def snapshot_json(snapshot: SnapshotAssertion):
 def freezer(freezer):
     """Fixture to freeze time for consistent timestamps in snapshots."""
     # Freeze time to a fixed point for consistency in tests
-    freezer.move_to("2023-10-01T12:00:00Z")
+    freezer.move_to('2023-10-01T12:00:00Z')
     return freezer
 
 

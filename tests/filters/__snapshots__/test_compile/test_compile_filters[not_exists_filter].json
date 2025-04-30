@@ -1,0 +1,18 @@
+{
+  "$state": {
+    "store": "appState"
+  },
+  "meta": {
+    "alias": null,
+    "disabled": false,
+    "field": "status",
+    "key": "status",
+    "negate": true,
+    "type": "exists"
+  },
+  "query": {
+    "exists": {
+      "field": "status"
+    }
+  }
+}
