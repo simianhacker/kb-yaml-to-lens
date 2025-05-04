@@ -17,6 +17,7 @@ deepdiff = ">=8.4.2"
 ruff = ">=0.11.6"
 pytest-asyncio = ">=0.26.0"
 beartype = "^0.20.2"
+humanize = "^4.12.3"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=7.0"
@@ -58,8 +59,10 @@ ignore = [
     "ERA001", # I like commented out code sometimes
     "PLR6301", # Ignore functions that don't use self
     "D203",    # incorrect-blank-line-before-class
-    "D213",    # multi-line-summary-second-line
+    "D413",    # multi-line-summary-second-line
     "COM812",  # Conflicts with formatter
+    "INP001",  # ignore __init__ requirements
+    "D100",    # Ignore missing docstrings for modules
 ]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.

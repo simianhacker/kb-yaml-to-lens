@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, Field
 
 if TYPE_CHECKING:
-    # from dashboard_compiler.panels.lens import LensPanel
     from dashboard_compiler.panels.images import ImagePanel
     from dashboard_compiler.panels.links import LinksPanel
     from dashboard_compiler.panels.markdown import MarkdownPanel
@@ -15,7 +14,7 @@ type PanelTypes = 'MarkdownPanel | SearchPanel | LinksPanel | ImagePanel'  # | L
 
 
 class Grid(BaseModel):
-    """Represents the grid layout configuration for a panel in the YAML schema.
+    """Represents the grid layout configuration for a panel.
 
     This determines the panel's position and size on the dashboard grid.
     """
@@ -34,7 +33,7 @@ class Grid(BaseModel):
 
 
 class BasePanel(BaseModel):
-    """Base model for all panel types defined in the YAML schema.
+    """Base model for all panel types defined.
 
     All specific panel types (e.g., Markdown, Search, Lens) inherit from this base class
     to include common configuration fields.

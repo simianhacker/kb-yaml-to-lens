@@ -8,7 +8,7 @@ from dashboard_compiler.panels.config import BasePanel
 
 
 class ImagePanel(BasePanel):
-    """Represents a Image panel configuration in the YAML schema.
+    """Represents a Image panel configuration.
 
     Image panels are used to display images.
     """

@@ -8,7 +8,7 @@ from dashboard_compiler.panels.config import BasePanel
 
 
 class SearchPanel(BasePanel):
-    """Represents a Search panel configuration in the YAML schema.
+    """Represents a Search panel configuration.
 
     Search panels are used to display the results of a saved Kibana search.
     """

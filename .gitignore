@@ -1,11 +1,10 @@
 **/.pytest_cache
 **/.venv
 **/__pycache__
-plans
 *.log
 archive
 references
 **/*.DS_Store
-plan*
 .roo
 reference
+plan-*

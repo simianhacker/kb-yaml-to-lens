@@ -63,7 +63,7 @@ class MatchTechnique(StrEnum):
 
 
 class OptionsListControl(BaseControl):
-    """Represents an Options List control in the YAML schema.
+    """Represents an Options List control.
 
     This control allows users to select one or more values from a list
     to filter data.
@@ -94,7 +94,7 @@ class OptionsListControl(BaseControl):
 
 
 class RangeSliderControl(BaseControl):
-    """Represents a Range Slider control in the YAML schema.
+    """Represents a Range Slider control.
 
     This control allows users to select a range of numeric or date values
     to filter data.
@@ -116,7 +116,7 @@ class RangeSliderControl(BaseControl):
 
 
 class TimeSliderControl(BaseControl):
-    """Represents a Range Slider control in the YAML schema.
+    """Represents a Range Slider control.
 
     This control allows users to select a range of numeric or date values
     to filter data.

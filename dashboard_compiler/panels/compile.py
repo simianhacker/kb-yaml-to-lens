@@ -1,8 +1,9 @@
 """Compile Dashboard Panels to Kibana View Models."""
 
-from dashboard_compiler.panels import LinksPanel, MarkdownPanel, PanelTypes  # ,  ESQLPanel, LensPanel
+from dashboard_compiler.panels import LinksPanel, MarkdownPanel, PanelTypes
 
-# from dashboard_compiler.panels.lens.compile import compile_esql_panel, compile_lens_panel
+# from dashboard_compiler.panels.esql.compile import compile_esql_panel
+#from dashboard_compiler.panels.lens.compile import compile_lens_panel
 from dashboard_compiler.panels.links.compile import compile_links_panel_config
 from dashboard_compiler.panels.links.view import KbnLinksPanel
 from dashboard_compiler.panels.markdown.compile import compile_markdown_panel_config
@@ -68,7 +69,8 @@ def compile_dashboard_panel(panel: PanelTypes) -> tuple[list[KbnReference], KbnP
         return references, KbnLinksPanel(panelIndex=panel_index, gridData=grid_data, embeddableConfig=embeddable_config)
 
     # if isinstance(panel, LensPanel):
-    #     return compile_lens_panel(panel)
+    #     references, kbn_panel = compile_lens_panel(panel)
+    #     return references, KbnLensPanel(panelIndex=panel_index, gridData=grid_data, embeddableConfig=kbn_panel)
 
     # if isinstance(panel, ESQLPanel):
     #     return compile_esql_panel(panel)

@@ -8,7 +8,7 @@ from dashboard_compiler.panels.config import BasePanel
 
 
 class MarkdownPanel(BasePanel):
-    """Represents a Markdown panel configuration in the YAML schema.
+    """Represents a Markdown panel configuration.
 
     Markdown panels are used to display rich text content using Markdown syntax.
     """

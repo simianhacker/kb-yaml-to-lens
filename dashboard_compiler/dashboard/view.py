@@ -3,8 +3,6 @@ import json
 from pydantic import BaseModel, Field, field_serializer
 
 from dashboard_compiler.controls.view import KbnControlGroupInput  # Controls are special
-
-# Import view panel models
 from dashboard_compiler.panels.view import KbnBasePanel, KbnSavedObjectMeta
 from dashboard_compiler.shared.view import KbnReference  # For top-level references
 

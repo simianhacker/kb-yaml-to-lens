@@ -9,7 +9,7 @@ from dashboard_compiler.shared.config import BaseCfgModel
 
 
 class BaseLink(BaseCfgModel):
-    """Base class for defining link objects within a Links panel in the YAML schema.
+    """Base class for defining link objects within a Links panel.
 
     Specific link types (e.g., DashboardLink, UrlLink) inherit from this base class.
     """
@@ -54,7 +54,7 @@ class UrlLink(BaseLink):
 
 
 class LinksPanel(BasePanel):
-    """Represents a Links panel configuration in the YAML schema.
+    """Represents a Links panel configuration.
 
     Links panels are used to display a collection of links to other dashboards,
     saved objects, or external URLs.

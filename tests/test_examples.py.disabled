@@ -2,7 +2,7 @@ import json
 import os
 
 import pytest
-import yaml  # Import yaml for loading config
+import yaml  
 from deepdiff import DeepDiff
 from syrupy.assertion import SnapshotAssertion
 
