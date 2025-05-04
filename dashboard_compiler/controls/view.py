@@ -125,6 +125,7 @@ class KbnRangeSliderControlExplicitInput(KbnBaseControlExplicitInput):
     step: int | float | None = Field(...)
     """The step size for the range slider, if applicable. If not set, defaults to 1."""
 
+
 class KbnBaseControl(BaseVwModel):
     """Base class for Kibana controls."""
 
@@ -154,6 +155,7 @@ class KbnOptionsListControl(KbnBaseControl):
 
     explicitInput: KbnOptionsListControlExplicitInput
     """The actual definition of the options list control."""
+
 
 class KbnTimeSliderControlExplicitInput(KbnBaseControlExplicitInput):
     """Explicit input for time slider controls."""
@@ -208,6 +210,7 @@ class KbnControlPanelsJson(RootDict[KbnControlTypes]):
 
     #     """
     #     return self.model_dump_json()
+
 
 class ControlStyleEnum(str, Enum):
     """Enumeration for control styles in Kibana dashboards."""

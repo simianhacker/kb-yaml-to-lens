@@ -57,6 +57,9 @@ ignore = [
     "CPY001", # No copyright notice for meee
     "ERA001", # I like commented out code sometimes
     "PLR6301", # Ignore functions that don't use self
+    "D203",    # incorrect-blank-line-before-class
+    "D213",    # multi-line-summary-second-line
+    "COM812",  # Conflicts with formatter
 ]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.

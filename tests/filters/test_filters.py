@@ -40,5 +40,3 @@ async def test_compile_filters(config: dict, desired_output: dict, snapshot_json
     kbn_filter_as_dict = kbn_filter.model_dump()
 
     assert DeepDiff(desired_output, kbn_filter_as_dict, exclude_regex_paths=EXCLUDE_REGEX_PATHS, **DEEP_DIFF_DEFAULTS) == {}  # type: ignore
-
-    #assert kbn_filter_as_dict == snapshot_json

@@ -1,4 +1,5 @@
 """Compile Lens panels into their Kibana view model representation."""
+
 import re
 
 from dashboard_compiler.panels import ESQLPanel, LensPanel
@@ -66,7 +67,7 @@ def chart_type_to_kbn_type(chart: BaseLensChart) -> str:
 
 
 def compile_lens_panel(panel: LensPanel) -> tuple[list[KbnReference], KbnLensPanel]:
-    """"Compile a Lens-based panel into its Kibana view model representation.
+    """ "Compile a Lens-based panel into its Kibana view model representation.
 
     Args:
         panel (LensPanel): The LensPanel object to compile.

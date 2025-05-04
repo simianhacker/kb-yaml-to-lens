@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import ConfigDict
 
@@ -15,4 +14,3 @@ class BaseModel(PydanticBaseModel):
         use_attribute_docstrings=True,  # Use attribute docstrings for field descriptions.
         serialize_by_alias=True,  # Whether to serialize fields by their alias names.
     )
-

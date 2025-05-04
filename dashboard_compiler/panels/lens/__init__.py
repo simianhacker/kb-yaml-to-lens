@@ -1,4 +1,5 @@
 """Module for Lens and ESQL panels."""
+
 from .config import (
     ESQLPanel,
     LensPanel,

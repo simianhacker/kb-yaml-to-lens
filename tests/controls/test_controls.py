@@ -1,14 +1,14 @@
 """Test the compilation of controls from config models to view models."""
 
+from typing import TYPE_CHECKING
 
 import pytest
 from deepdiff import DeepDiff
 from pydantic import BaseModel
-from syrupy.assertion import SnapshotAssertion
 
 from dashboard_compiler.controls.compile import compile_control, compile_control_group
-from dashboard_compiler.controls.config import ControlSettings, ControlTypes  # Corrected import
-from dashboard_compiler.controls.view import KbnControlGroupInput, KbnControlTypes
+from dashboard_compiler.controls.config import ControlSettings, ControlTypes
+from dashboard_compiler.controls.view import KbnControlGroupInput
 from tests.conftest import DEEP_DIFF_DEFAULTS
 from tests.controls.test_controls_data import (
     CONTROLS_TEST_CASE_IDS,
@@ -16,6 +16,9 @@ from tests.controls.test_controls_data import (
     SETTINGS_TEST_CASE_IDS,
     SETTINGS_TEST_CASES,
 )
+
+if TYPE_CHECKING:
+    from dashboard_compiler.controls.view import KbnControlTypes
 
 EXCLUDE_REGEX_PATHS = [
     r"root\['explicitInput'\]\['id'\]",  # Exclude the id field in explicitInput "root['explicitInput']['id']"
@@ -30,7 +33,7 @@ class ControlHolder(BaseModel):
 
 
 @pytest.mark.parametrize(('config', 'desired_output'), argvalues=CONTROLS_TEST_CASES, ids=CONTROLS_TEST_CASE_IDS)
-async def test_compile_controls(config: dict, desired_output: dict, snapshot_json: SnapshotAssertion) -> None:
+async def test_compile_controls(config: dict, desired_output: dict) -> None:
     """Test the compilation of various control configurations to their Kibana view model."""
     control_holder: ControlHolder = ControlHolder.model_validate({'control': config})
 
@@ -44,7 +47,7 @@ async def test_compile_controls(config: dict, desired_output: dict, snapshot_jso
 
 
 @pytest.mark.parametrize(('config', 'desired_output'), argvalues=SETTINGS_TEST_CASES, ids=SETTINGS_TEST_CASE_IDS)
-async def test_compile_control_settings(config: dict, desired_output: dict, snapshot_json: SnapshotAssertion) -> None:
+async def test_compile_control_settings(config: dict, desired_output: dict) -> None:
     """Test the compilation of control settings configurations to their Kibana view model."""
     control_settings = ControlSettings.model_validate(obj=config)
 

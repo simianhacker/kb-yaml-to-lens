@@ -9,6 +9,7 @@ from dashboard_compiler.shared.model import BaseModel
 
 T = TypeVar('T')
 
+
 @dataclass
 class OmitIfNone:
     pass
@@ -19,25 +20,13 @@ class BaseVwModel(BaseModel):
 
     @model_serializer
     def _serialize(self):  # noqa: ANN202
-
         model_class = self.__class__
 
-        omit_if_none_fields = {
-            k
-            for k, v in model_class.model_fields.items()
-            if any(isinstance(m, OmitIfNone) for m in v.metadata)
-        }
+        omit_if_none_fields = {k for k, v in model_class.model_fields.items() if any(isinstance(m, OmitIfNone) for m in v.metadata)}
 
-        serialization_aliases = {
-            k: v.serialization_alias for k, v in model_class.model_fields.items() if v.serialization_alias is not None
-        }
+        serialization_aliases = {k: v.serialization_alias for k, v in model_class.model_fields.items() if v.serialization_alias is not None}
 
-        return {
-            serialization_aliases.get(k, k): v
-            for k, v in self
-            if k not in omit_if_none_fields or v is not None
-        }
-
+        return {serialization_aliases.get(k, k): v for k, v in self if k not in omit_if_none_fields or v is not None}
 
 
 class KbnReference(BaseVwModel):

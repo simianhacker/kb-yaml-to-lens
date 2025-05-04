@@ -40,6 +40,7 @@ def compile_exists_filter(*, exists_filter: ExistsFilter, negate: bool = False, 
         query={'exists': {'field': exists_filter.exists}},
     )
 
+
 def compile_custom_filter(*, custom_filter: CustomFilter, negate: bool = False, nested: bool = False) -> KbnFilter:
     """Compile a custom filter object into its Kibana view model representation.
 

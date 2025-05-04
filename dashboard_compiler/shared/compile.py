@@ -19,7 +19,7 @@ def return_unless(var: bool | None, is_none: bool) -> bool:  # noqa: FBT001
     return var if var is not None else is_none
 
 
-def return_if(var: bool | None, is_false: T, is_true: T, default: T) -> T:  # noqa: FBT001
+def return_if(var: bool | None, is_false: T, is_true: T, default: T) -> T:
     """Evaluate var and return a corresponding value.
 
     Args:

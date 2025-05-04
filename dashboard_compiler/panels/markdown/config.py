@@ -1,4 +1,5 @@
 """Configuration for a Markdown Panel in a dashboard."""
+
 from typing import Literal
 
 from pydantic import Field

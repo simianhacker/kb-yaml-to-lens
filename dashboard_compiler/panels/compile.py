@@ -63,7 +63,7 @@ def compile_dashboard_panel(panel: PanelTypes) -> tuple[list[KbnReference], KbnP
         references, embeddable_config = compile_markdown_panel_config(panel)
         return references, KbnMarkdownPanel(panelIndex=panel_index, gridData=grid_data, embeddableConfig=embeddable_config)
 
-    if isinstance(panel, LinksPanel): 
+    if isinstance(panel, LinksPanel):
         references, embeddable_config = compile_links_panel_config(panel)
         return references, KbnLinksPanel(panelIndex=panel_index, gridData=grid_data, embeddableConfig=embeddable_config)
 

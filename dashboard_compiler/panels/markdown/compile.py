@@ -69,6 +69,7 @@ def compile_markdown_saved_vis(markdown_panel: MarkdownPanel) -> KbnMarkdownSave
         data=compile_markdown_saved_vis_data(),
     )
 
+
 def compile_markdown_panel_config(markdown_panel: MarkdownPanel) -> tuple[list[KbnReference], KbnMarkdownEmbeddableConfig]:
     """Compile a MarkdownPanel into its Kibana view model representation.
 

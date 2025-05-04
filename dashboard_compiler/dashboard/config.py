@@ -23,6 +23,7 @@ class DashboardSyncSettings(BaseCfgModel):
     colors: bool | None = Field(default=None)
     """Whether to apply the same color palette to all panels on the dashboard. Defaults to true if not set."""
 
+
 class DashboardSettings(BaseCfgModel):
     """Global settings for a dashboard with options for margins, synchronization of colors."""
 

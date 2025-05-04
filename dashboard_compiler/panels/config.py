@@ -6,11 +6,12 @@ from pydantic import BaseModel, Field
 
 if TYPE_CHECKING:
     # from dashboard_compiler.panels.lens import LensPanel
+    from dashboard_compiler.panels.images import ImagePanel
     from dashboard_compiler.panels.links import LinksPanel
     from dashboard_compiler.panels.markdown import MarkdownPanel
     from dashboard_compiler.panels.search import SearchPanel
 
-type PanelTypes = 'MarkdownPanel | SearchPanel | LinksPanel'  # | LensPanel
+type PanelTypes = 'MarkdownPanel | SearchPanel | LinksPanel | ImagePanel'  # | LensPanel
 
 
 class Grid(BaseModel):

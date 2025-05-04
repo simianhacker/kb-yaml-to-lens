@@ -9,6 +9,7 @@ DEEP_DIFF_DEFAULTS: dict[str, bool | int] = {
     'verbose_level': 2,
 }
 
+
 @pytest.fixture
 def snapshot_json(snapshot: SnapshotAssertion):
     """Fixture to use the JSONSnapshotExtension with default matchers."""

@@ -2,12 +2,8 @@
 
 import pytest
 from deepdiff import DeepDiff
-from pydantic import BaseModel
-from syrupy.assertion import SnapshotAssertion
 
 from dashboard_compiler.panels.config import Grid
-from dashboard_compiler.panels.links.compile import compile_links_panel_config
-from dashboard_compiler.panels.links.config import LinksPanel
 from dashboard_compiler.panels.markdown.compile import compile_markdown_panel_config
 from dashboard_compiler.panels.markdown.config import MarkdownPanel
 from tests.conftest import DEEP_DIFF_DEFAULTS
@@ -18,14 +14,14 @@ from tests.panels.markdown.test_markdown_data import (
 
 # Define fields to exclude from DeepDiff comparison
 EXCLUDE_REGEX_PATHS = [
-    r"root\['panelIndex'\]", # Exclude the panelIndex field
-    r"root\['gridData'\]\['i'\]", # Exclude the gridData.i field
+    r"root\['panelIndex'\]",  # Exclude the panelIndex field
+    r"root\['gridData'\]\['i'\]",  # Exclude the gridData.i field
 ]
 
-@pytest.mark.parametrize(('config', 'desired_output', 'desired_references'), TEST_CASES, ids=TEST_CASE_IDS)
-async def test_compile_markdown_panel(config: dict, desired_output: dict, desired_references: list, snapshot_json: SnapshotAssertion) -> None:
-    """Test the compilation of various MarkdownPanel configurations to their Kibana view model."""
 
+@pytest.mark.parametrize(('config', 'desired_output', 'desired_references'), TEST_CASES, ids=TEST_CASE_IDS)
+async def test_compile_markdown_panel(config: dict, desired_output: dict, desired_references: list) -> None:
+    """Test the compilation of various MarkdownPanel configurations to their Kibana view model."""
     panel_grid = Grid(x=0, y=0, w=24, h=10)
 
     markdown_panel = MarkdownPanel(grid=panel_grid, **config)

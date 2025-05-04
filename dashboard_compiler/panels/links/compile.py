@@ -4,7 +4,6 @@ from dashboard_compiler.panels.links.config import BaseLink, DashboardLink, Link
 from dashboard_compiler.panels.links.view import (
     KbnDashboardLink,
     KbnDashboardLinkOptions,
-    KbnLinksPanel,
     KbnLinksPanelAttributes,
     KbnLinksPanelEmbeddableConfig,
     KbnLinkTypes,
@@ -37,7 +36,7 @@ def compile_dashboard_link(order: int, link: DashboardLink) -> tuple[KbnReferenc
         KbnDashboardLinkOptions(
             openInNewTab=return_unless(var=link.new_tab, is_none=True),
             useCurrentDateRange=return_unless(var=link.with_time, is_none=True),
-            useCurrentFilters= return_unless(var=link.with_filters, is_none=True)
+            useCurrentFilters=return_unless(var=link.with_filters, is_none=True),
         )
         if has_options
         else None
@@ -77,10 +76,14 @@ def compile_url_link(order: int, link: UrlLink) -> KbnWebLink:
 
     has_options: bool = link.encode is not None or link.new_tab is not None
 
-    options: KbnWebLinkOptions | None = KbnWebLinkOptions(
-        openInNewTab=return_unless(var=link.new_tab, is_none=True),
-        encodeUrl=return_unless(var=link.encode, is_none=True),
-    ) if has_options else None
+    options: KbnWebLinkOptions | None = (
+        KbnWebLinkOptions(
+            openInNewTab=return_unless(var=link.new_tab, is_none=True),
+            encodeUrl=return_unless(var=link.encode, is_none=True),
+        )
+        if has_options
+        else None
+    )
 
     return KbnWebLink(
         destination=link.url,

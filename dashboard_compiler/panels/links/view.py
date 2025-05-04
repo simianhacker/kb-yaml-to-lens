@@ -4,7 +4,6 @@ Reference: https://github.com/elastic/kibana/blob/main/src/platform/plugins/priv
 """
 
 from typing import Annotated, Literal
-from warnings import deprecated
 
 from pydantic import Field
 
@@ -78,6 +77,7 @@ class KbnDashboardLink(KbnBaseLink):
     destinationRefName: str = Field(...)
     """Reference name for the destination dashboard."""
 
+
 class KbnWebLinkOptions(BaseVwModel):
     """Options for a web link in the Kibana Links panel."""
 
@@ -86,6 +86,7 @@ class KbnWebLinkOptions(BaseVwModel):
 
     encodeUrl: bool = Field(...)
     """If `true`, the URL will be URL-encoded when navigating to the external resource."""
+
 
 class KbnWebLink(KbnBaseLink):
     """Represents a link to an external web resource."""

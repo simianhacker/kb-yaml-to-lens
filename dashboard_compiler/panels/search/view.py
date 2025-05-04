@@ -1,4 +1,5 @@
 """View models for Search panels."""
+
 from typing import Any, Literal
 
 from pydantic import BaseModel, Field

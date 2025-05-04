@@ -1,4 +1,5 @@
 """Module for Lens and ESQL panels."""
+
 from .datatable.config import (
     ESQLDatatableChart,
     LensDatatableChart,
