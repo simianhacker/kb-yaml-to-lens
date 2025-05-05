@@ -53,7 +53,7 @@ CASE_METRIC_CHART_PRIMARY_ONLY: TestCaseType = (
     },
     {
         'type': 'metric',
-        'query': 'FROM metrics-* | STATS count(aerospike.namespace)',
+        'esql': 'FROM metrics-* | STATS count(aerospike.namespace)',
         'primary': ESQL_METRIC_PRIMARY,
     },
     {
@@ -72,7 +72,7 @@ CASE_METRIC_CHART_PRIMARY_AND_SECONDARY: TestCaseType = (
     },
     {
         'type': 'metric',
-        'query': 'FROM metrics-* | STATS count(aerospike.namespace), count_distinct(aerospike.node.name)',
+        'esql': 'FROM metrics-* | STATS count(aerospike.namespace), count_distinct(aerospike.node.name)',
         'primary': ESQL_METRIC_PRIMARY,
         'secondary': ESQL_METRIC_SECONDARY,
     },
@@ -80,8 +80,6 @@ CASE_METRIC_CHART_PRIMARY_AND_SECONDARY: TestCaseType = (
         'layerId': '65632693-9b81-4142-8c92-5fce93aa49e5',
         'layerType': 'data',
         'metricAccessor': '156e3e91-7bb6-406f-8ae5-cb409747953b',
-        'maxAccessor': '8976bad7-f148-4da1-8352-916f5ae2b730',
-        'showBar': True,
         'secondaryMetricAccessor': 'a1ec5883-19b2-4ab9-b027-a13d6074128b',
     },
 )
@@ -96,7 +94,7 @@ CASE_METRIC_CHART_PRIMARY_AND_SECONDARY_AND_BREAKDOWN: TestCaseType = (
     },
     {
         'type': 'metric',
-        'query': 'FROM metrics-* | STATS count(aerospike.namespace), count_distinct(aerospike.node.name) by agent.name',
+        'esql': 'FROM metrics-* | STATS count(aerospike.namespace), count_distinct(aerospike.node.name) by agent.name',
         'primary': ESQL_METRIC_PRIMARY,
         'secondary': ESQL_METRIC_SECONDARY,
         'breakdown': ESQL_METRIC_DIMENSION,
@@ -105,8 +103,6 @@ CASE_METRIC_CHART_PRIMARY_AND_SECONDARY_AND_BREAKDOWN: TestCaseType = (
         'layerId': '65632693-9b81-4142-8c92-5fce93aa49e5',
         'layerType': 'data',
         'metricAccessor': '156e3e91-7bb6-406f-8ae5-cb409747953b',
-        'maxAccessor': '8976bad7-f148-4da1-8352-916f5ae2b730',
-        'showBar': True,
         'secondaryMetricAccessor': 'a1ec5883-19b2-4ab9-b027-a13d6074128b',
         'breakdownByAccessor': '17fe5b4b-d36c-4fbd-ace9-58d143bb3172',
     },

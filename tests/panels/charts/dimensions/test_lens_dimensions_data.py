@@ -169,6 +169,29 @@ CASE_INTERVALS_DIMENSION: TestCaseType = (
 )
 """Tuple[InDimension, InMetric, OutMetric, OutDimension] for intervals dimension."""
 
+
+CASE_INTERVALS_DIMENSION_CUSTOM_GRANULARITY: TestCaseType = (
+    # Input dimension
+    {
+        'type': 'intervals',
+        'field': 'apache.uptime',
+        'granularity': 2,
+    },
+    INPUT_METRIC,
+    OUTPUT_METRIC,
+    {
+        'label': 'apache.uptime',
+        'dataType': 'number',
+        'operationType': 'range',
+        'sourceField': 'apache.uptime',
+        'isBucketed': True,
+        'scale': 'interval',
+        'params': {'includeEmptyRows': True, 'type': 'histogram', 'ranges': [{'from': 0, 'to': 1000, 'label': ''}], 'maxBars': 167.5},
+    },
+)
+"""Tuple[InDimension, InMetric, OutMetric, OutDimension] for intervals dimension with custom granularity."""
+
+
 CASE_INTERVALS_DIMENSION_CUSTOM_INTERVALS: TestCaseType = (
     # Input dimension
     {
@@ -205,27 +228,6 @@ CASE_INTERVALS_DIMENSION_CUSTOM_INTERVALS: TestCaseType = (
 )
 """Tuple[InDimension, InMetric, OutMetric, OutDimension] for intervals dimension with custom intervals."""
 
-
-CASE_INTERVALS_DIMENSION_CUSTOM_GRANULARITY: TestCaseType = (
-    # Input dimension
-    {
-        'type': 'intervals',
-        'field': 'apache.uptime',
-        'granularity': 2,
-    },
-    INPUT_METRIC,
-    OUTPUT_METRIC,
-    {
-        'label': 'apache.uptime',
-        'dataType': 'number',
-        'operationType': 'range',
-        'sourceField': 'apache.uptime',
-        'isBucketed': True,
-        'scale': 'interval',
-        'params': {'includeEmptyRows': True, 'type': 'histogram', 'ranges': [{'from': 0, 'to': 1000, 'label': ''}], 'maxBars': 167.5},
-    },
-)
-"""Tuple[InDimension, InMetric, OutMetric, OutDimension] for intervals dimension with custom granularity."""
 
 TEST_CASES = [
     CASE_DATE_HISTOGRAM_DIMENSION,

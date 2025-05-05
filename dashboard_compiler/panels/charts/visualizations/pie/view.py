@@ -19,6 +19,7 @@ class KbnPieStateVisualizationLayer(KbnBaseStateVisualizationLayer):
     truncateLegend: Annotated[bool | None, OmitIfNone()] = Field(None)
     legendMaxLines: Annotated[int | None, OmitIfNone()] = Field(None)
 
+
 class KbnPieVisualizationState(KbnBaseStateVisualization):
     """Represents the 'visualization' object for a Pie chart in the Kibana JSON structure."""
 

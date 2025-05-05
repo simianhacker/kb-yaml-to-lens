@@ -19,7 +19,7 @@ type KbnLensMetricColumnTypes = KbnLensFieldMetricColumn
 
 type KbnLensMetricFormatTypes = KbnLensMetricFormat
 
-type KbnESQLColumnTypes = KbnESQLFieldMetricColumn | KbnESQLFieldDimensionColumn
+type KbnESQLColumnTypes = KbnESQLMetricColumnTypes | KbnESQLDimensionColumnTypes
 
 type KbnESQLMetricColumnTypes = KbnESQLFieldMetricColumn
 
@@ -166,7 +166,7 @@ class KbnLensTermsParentFormat(BaseVwModel):
     """The parent format for terms dimension columns."""
 
     id: Literal['terms']
-    params: KbnLensTermsParentFormatParams = Field(default_factory=KbnLensTermsParentFormatParams)
+    #params: KbnLensTermsParentFormatParams | None = Field(default
 
 
 class KbnLensTermsDimensionColumnParams(KbnLensDimensionColumnParams):
@@ -235,8 +235,8 @@ class KbnLensCustomIntervalsDimensionColumnParentFormat(BaseVwModel):
 class KbnLensIntervalsRange(BaseVwModel):
     """Represents a single range within the intervals dimension columns."""
 
-    from_value: Annotated[float | None, OmitIfNone()] = Field(default=None, alias='from')
-    to_value: Annotated[float | None, OmitIfNone()] = Field(default=None, alias='to')
+    from_value: int | float | None = Field(default=None, alias='from')
+    to_value: int | float | None = Field(default=None, alias='to')
     label: Annotated[str | None, OmitIfNone()] = Field(default=None)
 
 

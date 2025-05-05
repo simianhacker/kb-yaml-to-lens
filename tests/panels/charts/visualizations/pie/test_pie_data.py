@@ -39,7 +39,7 @@ CASE_PIE_CHART: TestCaseType = (
     },
     {
         'type': 'pie',
-        'query': 'FROM metrics-* | STATS count(*) by aerospike.namespace',
+        'esql': 'FROM metrics-* | STATS count(*) by aerospike.namespace',
         'metric': ESQL_PIE_METRIC,
         'slice_by': [ESQL_PIE_DIMENSION],
     },
@@ -76,7 +76,7 @@ CASE_DONUT_CHART: TestCaseType = (
     },
     {
         'type': 'pie',
-        'query': 'FROM metrics-* | STATS count(*) by aerospike.namespace',
+        'esql': 'FROM metrics-* | STATS count(*) by aerospike.namespace',
         'metric': ESQL_PIE_METRIC,
         'slice_by': [ESQL_PIE_DIMENSION],
         'appearance': {
@@ -111,17 +111,17 @@ CASE_PIE_CHART_INSIDE_LABELS_INTEGER_VALUES: TestCaseType = (
         'metric': LENS_PIE_METRIC,
         'slice_by': [LENS_PIE_DIMENSION],
         'titles_and_text': {
-            'slice_labels': 'show',
+            'slice_labels': 'inside',
             'slice_values': 'integer',
         },
     },
     {
         'type': 'pie',
-        'query': 'FROM metrics-* | STATS count(*) by aerospike.namespace',
+        'esql': 'FROM metrics-* | STATS count(*) by aerospike.namespace',
         'metric': ESQL_PIE_METRIC,
         'slice_by': [ESQL_PIE_DIMENSION],
         'titles_and_text': {
-            'slice_labels': 'show',
+            'slice_labels': 'inside',
             'slice_values': 'integer',
         },
     },
@@ -143,7 +143,6 @@ CASE_PIE_CHART_INSIDE_LABELS_INTEGER_VALUES: TestCaseType = (
             'paletteId': 'eui_amsterdam_color_blind',
             'colorMode': {'type': 'categorical'},
         },
-        'emptySizeRatio': 0,
     },
 )
 """Tuple[Config as Dict, View as Dict, References as List] for a pie chart with inside labels and integer values."""
@@ -161,7 +160,7 @@ CASE_PIE_CHART_SHOW_LARGE_LEGEND_NO_TRUNCATE: TestCaseType = (
     },
     {
         'type': 'pie',
-        'query': 'FROM metrics-* | STATS count(*) by aerospike.namespace',
+        'esql': 'FROM metrics-* | STATS count(*) by aerospike.namespace',
         'metric': ESQL_PIE_METRIC,
         'slice_by': [ESQL_PIE_DIMENSION],
         'legend': {
@@ -188,7 +187,6 @@ CASE_PIE_CHART_SHOW_LARGE_LEGEND_NO_TRUNCATE: TestCaseType = (
             'paletteId': 'eui_amsterdam_color_blind',
             'colorMode': {'type': 'categorical'},
         },
-        'emptySizeRatio': 0,
         'legendSize': 'large',
         'truncateLegend': False,
     },

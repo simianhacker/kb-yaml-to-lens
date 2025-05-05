@@ -4,6 +4,7 @@ import pytest
 from deepdiff import DeepDiff
 from pydantic import BaseModel
 
+from dashboard_compiler.panels.charts.columns.view import KbnLensFieldMetricColumn
 from dashboard_compiler.panels.charts.dimensions.compile import compile_lens_dimension
 from dashboard_compiler.panels.charts.dimensions.config import LensDimensionTypes
 from dashboard_compiler.panels.charts.metrics.compile import compile_lens_metric
@@ -46,7 +47,7 @@ async def test_compile_lens_dimension(config: dict, metric_config: dict, desired
     dimension_holder = DimensionHolder.model_validate({'dimension': config})
 
     # Create columns_by_name dictionary from the compiled metric
-    kbn_metric_column_by_id = {metric_id: kbn_metric_column}
+    kbn_metric_column_by_id: dict[str, KbnLensFieldMetricColumn] = {metric_id: kbn_metric_column}
 
     # Call the correct Lens dimension compile function
     _, kbn_dimension_column = compile_lens_dimension(

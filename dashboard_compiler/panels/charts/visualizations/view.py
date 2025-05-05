@@ -1,11 +1,16 @@
 from enum import StrEnum
-from typing import Any, TypeVar
+from typing import TYPE_CHECKING, Annotated, Any, TypeVar
 
 from pydantic import Field, RootModel
 
 from dashboard_compiler.panels.charts.columns.view import KbnColumnTypes
-from dashboard_compiler.shared.view import BaseVwModel
+from dashboard_compiler.shared.view import BaseVwModel, OmitIfNone
 
+if TYPE_CHECKING:
+    from .pie.view import KbnPieVisualizationState
+    from .metric.view import KbnMetricVisualizationState
+
+type KbnStateVisualizationType = KbnPieVisualizationState | KbnMetricVisualizationState
 
 
 class KbnLayerDataSourceState(BaseVwModel):
@@ -77,13 +82,10 @@ class KbnLayerColorMapping(BaseVwModel):
 class KbnBaseStateVisualizationLayer(BaseVwModel):
     layerId: str
     layerType: str
-    colorMapping: KbnLayerColorMapping | None = None
+    colorMapping: Annotated[KbnLayerColorMapping | None, OmitIfNone()] = None
 
 class KbnBaseStateVisualization(BaseVwModel):
-    layers: list[KbnBaseStateVisualizationLayer] | None = Field(...)
-
-KbnStateVisualizationType = TypeVar('KbnStateVisualizationType', bound=KbnBaseStateVisualization)
-
+    layers: list[KbnBaseStateVisualizationLayer] = Field(...)
 
 
 class KbnVisualizationTypeEnum(StrEnum):

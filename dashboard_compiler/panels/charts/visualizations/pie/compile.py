@@ -2,16 +2,11 @@
 
 from dashboard_compiler.panels.charts.columns.view import (
     KbnESQLColumnTypes,
-    KbnESQLDimensionColumnTypes,
-    KbnESQLMetricColumnTypes,
     KbnLensColumnTypes,
-    KbnLensDimensionColumnTypes,
     KbnLensMetricColumnTypes,
 )
 from dashboard_compiler.panels.charts.dimensions.compile import (
-    compile_esql_dimension,
     compile_esql_dimensions,
-    compile_lens_dimension,
     compile_lens_dimensions,
 )
 from dashboard_compiler.panels.charts.metrics.compile import compile_esql_metric, compile_lens_metric
@@ -22,11 +17,8 @@ from dashboard_compiler.panels.charts.visualizations.pie.view import (
 )
 from dashboard_compiler.panels.charts.visualizations.view import (
     KbnLayerColorMapping,
-    KbnLayerColorMappingColor,
-    KbnLayerColorMappingRule,
-    KbnLayerColorMappingSpecialAssignment,
 )
-from dashboard_compiler.shared.config import random_id_generator, stable_id_generator
+from dashboard_compiler.shared.config import random_id_generator
 
 
 def compile_pie_chart(
@@ -54,6 +46,9 @@ def compile_pie_chart(
     if chart.titles_and_text and chart.titles_and_text.slice_values:
         number_display = chart.titles_and_text.slice_values
 
+        if chart.titles_and_text.slice_values == 'integer':
+            number_display = 'value'
+
     category_display = 'default'
     if chart.titles_and_text and chart.titles_and_text.slice_labels:
         category_display = chart.titles_and_text.slice_labels
@@ -67,8 +62,12 @@ def compile_pie_chart(
         legend_size = chart.legend.width
 
     truncate_legend = None
-    if chart.legend and chart.legend.truncate_labels:
-        truncate_legend = chart.legend.truncate_labels
+    legend_max_lines = None
+    if chart.legend and isinstance(chart.legend.truncate_labels, int):
+        if chart.legend.truncate_labels == 0:
+            truncate_legend = False
+        else:
+            legend_max_lines = chart.legend.truncate_labels
 
     kbn_color_mapping = KbnLayerColorMapping()
 
@@ -85,7 +84,7 @@ def compile_pie_chart(
         emptySizeRatio=0 if len(metric_ids) > 1 else None,
         legendSize=legend_size,
         truncateLegend=False if truncate_legend == 0 else None,
-        legendMaxLines=truncate_legend,
+        legendMaxLines=legend_max_lines,
     )
 
     return KbnPieVisualizationState(shape=shape, layers=[kbn_layer_visualization])

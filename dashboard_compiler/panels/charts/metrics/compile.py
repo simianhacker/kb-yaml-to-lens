@@ -75,6 +75,7 @@ AGG_TO_FRIENDLY_TITLE = {
     'percentile_rank': 'Percentile rank',
     'percentile': 'percentile',
     'last_value': 'Last value',
+    'unique_count': 'Unique count',
 }
 
 AGG_TO_DEFAULT_EXCLUDE_ZEROS = {
