@@ -4,7 +4,7 @@ from typing import Literal
 
 from pydantic import Field
 
-from dashboard_compiler.queries.config import QueryTypes
+from dashboard_compiler.queries.types import LegacyQueryTypes
 from dashboard_compiler.shared.config import BaseCfgModel
 
 
@@ -57,7 +57,7 @@ class BaseLensMetric(BaseMetric):
     format: LensMetricFormatTypes | None = Field(default=None)
     """The format of the metric."""
 
-    filter: QueryTypes | None = Field(default=None)
+    filter: LegacyQueryTypes | None = Field(default=None)
     """A KQL filter applied before determining the metric value."""
 
 
