@@ -1,32 +1,74 @@
-# Search Panel
+# Search Panel Configuration
 
-The `search` panel is used to display the results of a saved Kibana search.
+The `search` panel type is used to embed the results of a pre-existing, saved Kibana search directly onto your dashboard. This allows you to display dynamic log views, event lists, or any other data set defined by a saved search in Discover.
+
+## Minimal Configuration Example
+
+To add a Search panel, you need to specify its `type`, `grid` position, and the `saved_search_id`.
 
 ```yaml
-- panel:
-    type: search
-    # Common panel fields (id, title, description, grid, hide_title) also apply
-    saved_search_id: string # (Required) The ID of the saved Kibana search object.
+# Within a dashboard's 'panels' list:
+# - type: search
+#   title: "All System Logs"
+#   grid:
+#     x: 0
+#     y: 0
+#     w: 12 # Full width
+#     h: 10 # Height of 10 grid units
+#   saved_search_id: "your-saved-search-id" # Replace with the actual ID
+
+# For a complete dashboard structure:
+dashboard:
+  name: "Log Monitoring Dashboard"
+  panels:
+    - type: search
+      title: "All System Logs"
+      grid:
+        x: 0
+        y: 0
+        w: 12
+        h: 10
+      saved_search_id: "a1b2c3d4-e5f6-7890-1234-567890abcdef" # Example ID
 ```
 
-## Fields
+## Complex Configuration Example (Illustrative)
 
-*   `type` (required, string): Must be `search`.
-*   `saved_search_id` (required, string): The ID of the saved Kibana search object to display in the panel.
-
-## Example
+Search panels primarily rely on the configuration of the saved search itself (columns, sort order, query within the saved search). The panel configuration in the dashboard YAML is straightforward. This example shows it with a description and a hidden title.
 
 ```yaml
 dashboard:
-  title: Dashboard with Search Results
+  name: "Security Incidents Overview"
   panels:
-    - panel:
-        type: search
-        grid: { x: 0, y: 0, w: 24, h: 10 }
-        title: Recent Errors
-        saved_search_id: my-saved-error-search-id
+    - type: search
+      # Title is defined in the saved search, so we hide the panel's own title
+      hide_title: true
+      description: "Displays critical security alerts from the last 24 hours, as defined in the 'Critical Alerts' saved search."
+      grid:
+        x: 0
+        y: 0
+        w: 12
+        h: 8
+      saved_search_id: "critical-security-alerts-saved-search"
 ```
+
+## Full Configuration Options
+
+Search panels inherit from the [Base Panel Configuration](../base.md) and have one specific required field:
+
+| YAML Key          | Data Type        | Description                                                                                                | Kibana Default                  | Required |
+| ----------------- | ---------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------- | -------- |
+| `type`            | `Literal['search']`| Specifies the panel type.                                                                                | `search`                        | Yes      |
+| `id`              | `string`         | A unique identifier for the panel. Inherited from BasePanel.                                               | Generated ID                    | No       |
+| `title`           | `string`         | The title displayed on the panel header. This can override the title of the saved search if desired. Inherited from BasePanel. | `""` (empty string)             | No       |
+| `hide_title`      | `boolean`        | If `true`, the panel title will be hidden. Inherited from BasePanel.                                       | `false`                         | No       |
+| `description`     | `string`         | A brief description of the panel. Inherited from BasePanel.                                                | `""` (empty string, if `None`)  | No       |
+| `grid`            | `Grid` object    | Defines the panel's position and size. Inherited from BasePanel. See [Grid Object Configuration](../base.md#grid-object-configuration). | N/A                             | Yes      |
+| `saved_search_id` | `string`         | The ID of the saved Kibana search object (from Discover app) to display in the panel.                      | N/A                             | Yes      |
+
+**Note on Behavior:** The appearance, columns displayed, sort order, and underlying query of the Search panel are primarily controlled by the configuration of the saved search itself within Kibana's Discover application. The dashboard panel configuration mainly serves to embed that saved search.
 
 ## Related Documentation
 
-*   [Base Panel Object](../base.md)
+*   [Base Panel Configuration](../base.md)
+*   [Dashboard Configuration](../dashboard/dashboard.md)
+*   Kibana Discover and Saved Searches documentation (external to this project).
