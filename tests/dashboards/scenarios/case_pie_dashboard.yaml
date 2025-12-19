@@ -9,6 +9,8 @@ dashboard:
       type: pie
       id: 21cb2847-7b10-404e-9672-4ee2f2beca6e
       data_view: metrics-*
+      color:
+        palette: default
       slice_by: 
         - field: aerospike.namespace
           type: values
@@ -16,5 +18,4 @@ dashboard:
           id: 439aa452-8525-4644-8d5b-42d66f8b41fd
       metric:
         aggregation: count
-        field: ___records___
         id: fadbe80d-a574-4ab6-80c0-3bfe4c4e6d33

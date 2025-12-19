@@ -1,51 +1,106 @@
-# Queries
+# Queries Configuration
 
-This document describes the structure for defining queries at both the dashboard and panel levels.
+Queries are used to define the search criteria for retrieving data. They can be applied globally at the dashboard level or specifically to individual panels that support them. This compiler supports KQL (Kibana Query Language), Lucene, and ESQL (Elasticsearch Query Language).
 
-## Dashboard Queries
+## Minimal Configuration Examples
 
-Dashboard queries are applied globally to all panels on the dashboard. They are defined within the `query` object at the top level of the `dashboard` object.
+**KQL Query:**
+```yaml
+# Applied at the dashboard level
+dashboard:
+  # ...
+  query:
+    kql: 'response_code:200 AND "user.id": "test-user"'
+```
 
+**Lucene Query:**
+```yaml
+# Applied at the dashboard level
+dashboard:
+  # ...
+  query:
+    lucene: 'event.module:nginx AND event.dataset:nginx.access'
+```
+
+**ESQL Query (typically for specific panel types like ESQL-backed charts):**
+```yaml
+# Example within a panel configuration that supports ESQL
+panels:
+  - type: some_esql_panel # Hypothetical panel type
+    # ... other panel config
+    query: |
+      FROM my_index
+      | STATS RARE(clientip)
+```
+
+## Full Configuration Options
+
+Queries are typically defined under a `query` key, either at the root of the `dashboard` object or within a specific panel's configuration. The structure of the `query` object determines the language.
+
+### KQL Query
+
+Filters documents using the Kibana Query Language (KQL). This is often the default query language in Kibana.
+
+| YAML Key | Data Type | Description                                      | Kibana Default | Required |
+| -------- | --------- | ------------------------------------------------ | -------------- | -------- |
+| `kql`    | `string`  | The KQL query string to apply.                   | N/A            | Yes      |
+| `query`  | `object`  | The parent object containing the `kql` key.      | N/A            | Yes      |
+
+**Usage Example (Dashboard Level):**
 ```yaml
 dashboard:
-  query: object         # (Optional) A query string to filter the dashboard data. Defaults to an empty KQL query.
-    # Choose one of the following query types:
-    kql: string         # (Required if query type is kql) KQL query string.
-    lucene: string      # (Required if query type is lucene) Lucene query string.
+  # ...
+  query:
+    kql: 'event.action:"user_login" AND event.outcome:success'
 ```
 
-### Query Types
+### Lucene Query
 
-*   **KQL Query**: Filters documents using the Kibana Query Language.
-    ```yaml
-    query:
-      kql: 'event.dataset: "apache.access" and http.response.status_code >= 500'
-    ```
-*   **Lucene Query**: Filters documents using the Lucene query syntax.
-    ```yaml
-    query:
-      lucene: 'status:500 OR status:404'
-    ```
+Filters documents using the more expressive, but complex, Lucene query syntax.
 
-## Panel Queries
+| YAML Key | Data Type | Description                                      | Kibana Default | Required |
+| -------- | --------- | ------------------------------------------------ | -------------- | -------- |
+| `lucene` | `string`  | The Lucene query string to apply.                | N/A            | Yes      |
+| `query`  | `object`  | The parent object containing the `lucene` key.   | N/A            | Yes      |
 
-Panel queries are applied only to the specific panel they are defined within, in addition to any global dashboard query. They are defined within the `query` field of a panel object (currently only supported for `lens` panels).
-
+**Usage Example (Dashboard Level):**
 ```yaml
-- panel:
-    type: lens
-    query: string         # (Optional) Panel-specific KQL query. Defaults to "".
+dashboard:
+  # ...
+  query:
+    lucene: '(geo.src:"US" OR geo.src:"CA") AND tags:"production"'
 ```
 
-### Fields
+### ESQL Query
 
-*   `query` (optional, string): A KQL query string specific to this panel. Defaults to an empty string.
+Uses Elasticsearch Query Language (ESQL) for data retrieval and aggregation. ESQL queries are typically used by specific panel types that are designed to work with ESQL's tabular results (e.g., ESQL-driven charts or tables). The configuration is a direct string under the `query` key for such panels.
 
-### Example
+| YAML Key | Data Type | Description                                                                 | Kibana Default | Required |
+| -------- | --------- | --------------------------------------------------------------------------- | -------------- | -------- |
+| `query`  | `string`  | The ESQL query string. The Pydantic model uses `root` for this direct string. | N/A            | Yes      |
 
+**Usage Example (Panel Level - for a hypothetical ESQL panel):**
 ```yaml
 panels:
-  - panel:
-      type: lens
-      # ... other panel fields ...
-      query: 'user.id: "kibana_user"'
+  - type: esql_backed_chart # This panel type would be designed to use ESQL
+    title: "Top User Agents by Count"
+    query: |
+      FROM "web-logs-*"
+      | STATS count = COUNT(user_agent.name) BY user_agent.name
+      | SORT count DESC
+      | LIMIT 10
+    # ... other panel-specific configurations
+```
+
+## Query Scope
+
+*   **Dashboard Level Query**: Defined under `dashboard.query`. This query is applied globally to all panels that do not explicitly override it or ignore global queries. KQL and Lucene are supported at this level.
+*   **Panel Level Query**: Defined under `panel.query` (for panels that support it, e.g., Lens panels, ESQL panels). This query is specific to the panel and is often combined with (or can override) the dashboard-level query, depending on the panel's behavior.
+    *   Lens panels typically use KQL for their panel-specific query.
+    *   ESQL-specific panels will use an ESQL query string.
+
+## Related Documentation
+
+*   [Dashboard Configuration](../dashboard/dashboard.md)
+*   [Filters Configuration](../filters/config.md)
+*   [Panel Documentation (e.g., Lens, ESQL specific panels)](../panels/base.md)
