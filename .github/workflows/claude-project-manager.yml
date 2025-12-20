@@ -219,7 +219,6 @@ jobs:
             issues: write
 
           prompt: ${{ steps.pm-prompt.outputs.PROMPT }}
-          track_progress: true
           claude_args: |
             --allowed-tools mcp__repository-summary__generate_agents_md,mcp__github-research__search_issues,mcp__github-research__search_pull_requests,mcp__github-research__list_issues,mcp__github-research__list_pull_requests,mcp__github-research__get_issue,mcp__github-research__get_pull_request,Bash(git:*)
             --mcp-config /tmp/mcp-config/mcp-servers.json
