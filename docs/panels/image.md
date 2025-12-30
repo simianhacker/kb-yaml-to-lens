@@ -35,29 +35,17 @@ Making dashboards beautiful for you!
 To add an Image panel, you need to specify its `type`, `grid` position, and the `from_url` for the image source.
 
 ```yaml
-# Within a dashboard's 'panels' list:
-# - type: image
-#   title: "Company Logo"
-#   grid:
-#     x: 0
-#     y: 0
-#     w: 4  # Width of 4 grid units
-#     h: 3  # Height of 3 grid units
-#   from_url: "https://example.com/path/to/your/logo.png"
-
-# For a complete dashboard structure:
 dashboards:
--
-  name: "Branded Dashboard"
-  panels:
-    - type: image
-      title: "Company Logo"
-      grid:
-        x: 0
-        y: 0
-        w: 4
-        h: 3
-      from_url: "https://example.com/path/to/your/logo.png"
+  - name: "Branded Dashboard"
+    panels:
+      - type: image
+        title: "Company Logo"
+        grid:
+          x: 0
+          y: 0
+          w: 4
+          h: 3
+        from_url: "https://example.com/path/to/your/logo.png"
 ```
 
 ## Complex Configuration Example
@@ -66,20 +54,19 @@ This example demonstrates an Image panel with specific `fit` behavior, alternati
 
 ```yaml
 dashboards:
--
-  name: "Dashboard with Informative Image"
-  panels:
-    - type: image
-      title: "System Architecture Diagram"
-      grid:
-        x: 0
-        y: 0
-        w: 12 # Full width
-        h: 6
-      from_url: "https://example.com/path/to/architecture.svg"
-      fit: "contain"  # Ensure the whole image is visible within the panel
-      description: "Overview of the system components and their interactions." # Alt text
-      background_color: "#f0f0f0" # Light grey background
+  - name: "Dashboard with Informative Image"
+    panels:
+      - type: image
+        title: "System Architecture Diagram"
+        grid:
+          x: 0
+          y: 0
+          w: 12 # Full width
+          h: 6
+        from_url: "https://example.com/path/to/architecture.svg"
+        fit: "contain"  # Ensure the whole image is visible within the panel
+        description: "Overview of the system components and their interactions." # Alt text
+        background_color: "#f0f0f0" # Light grey background
 ```
 
 ## Full Configuration Options
