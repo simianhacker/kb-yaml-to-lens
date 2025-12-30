@@ -43,6 +43,7 @@ When a parent rule code is enabled (e.g., `PLR`), it automatically enables **all
 **Do NOT flag rules as "not found in pyproject.toml" when their parent category is enabled**. Check if the parent code (first 3 characters for numbered rules, first 2-3 letters for others) exists in `extend-select` before suggesting the rule is missing.
 
 Examples:
+
 - `PLR0911` (too many return statements) → covered by `PLR`
 - `PLR2004` (magic numbers) → covered by `PLR`
 - `PTH123` (Path usage) → covered by `PTH`
@@ -83,6 +84,7 @@ def compile_dashboard_panel(panel: PanelTypes) -> tuple[list[KbnReference], KbnB
 ```
 
 **Do NOT suggest**:
+
 - Removing these isinstance checks
 - Removing the final error-raising statements
 - Marking these as "unnecessary" or "unreachable"
@@ -108,6 +110,7 @@ The codebase uses `# pyright: ignore[reportUnnecessaryIsInstance]` in specific l
 Per `src/dashboard_compiler/AGENTS.md`, the codebase uses **explicit boolean comparisons** instead of implicit truthiness:
 
 **Preferred**:
+
 ```python
 if x is not None:
 if len(items) > 0:
@@ -115,6 +118,7 @@ if my_bool is True:
 ```
 
 **Not preferred**:
+
 ```python
 if x:
 if items:
@@ -143,11 +147,13 @@ Test files in `tests/**/*.py` have relaxed linting rules (see `pyproject.toml:11
 The project maintains an 80% docstring coverage threshold. This is enforced in CI.
 
 **Flag missing docstrings** on:
+
 - Public functions and methods
 - Public classes
 - Module-level code (except `__init__.py` - see `D100` in pyproject.toml)
 
 **Do NOT flag missing docstrings** on:
+
 - Test functions and methods (excluded by `D104`)
 - Internal/private functions (prefixed with `_`)
 - View models in `**/view.py` files (excluded by `D101` per-file ignore)
@@ -157,6 +163,7 @@ The project maintains an 80% docstring coverage threshold. This is enforced in C
 Maximum line length: **140 characters** (configured in `pyproject.toml:72`)
 
 Flag lines exceeding this limit, but be aware that:
+
 - Test files have this relaxed via `E501` ignore
 - Some view model files may have exemptions
 
@@ -238,6 +245,7 @@ When reviewing code for kb-yaml-to-lens:
 7. ❌ **DON'T** suggest style changes that contradict project guidelines
 
 When in doubt, check the relevant configuration files:
+
 - `pyproject.toml` - Ruff rules and exemptions
 - `src/dashboard_compiler/AGENTS.md` - Coding standards
 - `src/dashboard_compiler/shared/model.py` - Base Pydantic configuration
