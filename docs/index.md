@@ -21,6 +21,7 @@ graph LR
 - **YAML-based Definition** – Define dashboards, panels, filters, and queries in simple, readable YAML.
 - **Kibana Integration** – Compile to NDJSON format compatible with Kibana 8+.
 - **Rich Panel Support** – Support for Lens (metric, pie, XY charts), Markdown, Links, Image, and Search panels.
+- **Color Palettes** – Choose from color-blind safe, brand, and other built-in color palettes.
 - **Interactive Controls** – Add options lists, range sliders, and time sliders with chaining support.
 - **Flexible Filtering** – Use a comprehensive filter DSL (exists, phrase, range) or raw KQL/Lucene/ESQL queries.
 - **Direct Upload** – Compile and upload to Kibana in one step, with support for authentication and API keys.
