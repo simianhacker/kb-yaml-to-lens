@@ -1,208 +1,227 @@
 # Root Makefile - Global orchestration for all components
 # Component-specific commands are in each component's Makefile
 
-# Enable parallel execution for check target (3 components)
-# Use `make check PARALLEL=0` to disable parallel execution for debugging
-PARALLEL ?= 1
-ifeq ($(PARALLEL),1)
-MAKEFLAGS += --jobs=3 --output-sync=target
+# Set SHELL before including Makefile.shared to ensure bash is used
+# On Windows in GitHub Actions, bash is available via Git Bash when shell: bash is used
+# GitHub Actions sets RUNNER_OS environment variable (Windows, Linux, macOS)
+ifdef RUNNER_OS
+  ifeq ($(RUNNER_OS),Windows)
+    SHELL := bash
+    MAKE_SHELL := bash
+  else
+    SHELL := /bin/bash
+    MAKE_SHELL := /bin/bash
+  endif
+else
+  # Not in GitHub Actions - default to /bin/bash for Unix-like systems
+  SHELL := /bin/bash
+  MAKE_SHELL := /bin/bash
 endif
 
-.PHONY: all help install ci check fix test-unit test-e2e clean clean-full lint-markdown lint-markdown-check check-docs gh-get-review-threads gh-resolve-review-thread gh-get-latest-review gh-check-latest-review gh-get-comments-since gh-minimize-outdated-comments gh-check-repo-activity bump-patch bump-minor bump-major bump-version-show compiler-ci vscode-ci markdown-ci compiler vscode docs
+# Include shared helpers (after setting SHELL)
+include Makefile.shared
 
-all: check
+# Detect OS and set appropriate shell for recursive make calls
+
+# Components for pass-through commands
+COMPONENTS := packages/kb-dashboard-compiler vscode-extension
+
+# YAML linting exclusions
+YAMLFIX_EXCLUDE := \
+	--exclude ".venv/**/*.yaml" --exclude ".venv/**/*.yml" \
+	--exclude "packages/kb-dashboard-compiler/.venv/**/*.yaml" --exclude "packages/kb-dashboard-compiler/.venv/**/*.yml" \
+	--exclude "node_modules/**/*.yaml" --exclude "node_modules/**/*.yml" \
+	--exclude "vscode-extension/node_modules/**/*.yaml" --exclude "vscode-extension/node_modules/**/*.yml" \
+	--exclude "vscode-extension/.vscode-test/**/*.yaml" --exclude "vscode-extension/.vscode-test/**/*.yml"
+
+.PHONY: help all root ci fix install lint-markdown lint-markdown-check lint-yaml lint-yaml-check bump-patch bump-minor bump-major bump-version-show compiler vscode docs gh
 
 help:
-	@echo "=== Root Orchestration Commands ==="
-	@echo ""
-	@echo "  install       - Install all dependencies (compiler + vscode + markdownlint)"
-	@echo "  check         - Run fast checks in parallel (lint + typecheck + unit tests)"
-	@echo "  ci            - Run comprehensive CI (check + e2e tests)"
-	@echo "  fix           - Auto-fix linting issues across all components"
-	@echo "  test-unit     - Run unit tests across components"
-	@echo "  test-e2e      - Run end-to-end tests"
-	@echo "  clean         - Clean all component caches"
-	@echo "  clean-full    - Clean all including virtual environments"
-	@echo "  check-docs    - Check documentation (markdown lint + link verification)"
-	@echo ""
-	@echo "Markdown Linting (global):"
-	@echo "  lint-markdown       - Auto-fix markdown issues"
-	@echo "  lint-markdown-check - Check markdown without fixing"
+	@echo "Root Makefile - Global Commands"
 	@echo ""
 	@echo "=== Component Pass-Through Commands ==="
 	@echo ""
-	@echo "Run any component target directly from root:"
-	@echo "  make compiler <target>  - Run in compiler/"
+	@echo "Run target in all components:"
+	@echo "  make all <target>       - Run in compiler + vscode"
+	@echo ""
+	@echo "Run target in single component:"
+	@echo "  make compiler <target>  - Run in packages/kb-dashboard-compiler/"
 	@echo "  make vscode <target>    - Run in vscode-extension/"
-	@echo "  make docs <target>      - Run in docs/"
+	@echo "  make docs <target>      - Run in packages/kb-dashboard-docs/"
+	@echo "  make gh <target>        - Run in .github/scripts/"
 	@echo ""
-	@echo "Examples:"
-	@echo "  make compiler help         - Show all compiler targets"
-	@echo "  make compiler test-smoke   - Run compiler smoke tests"
-	@echo "  make compiler docker-build - Build compiler Docker image"
-	@echo "  make vscode help           - Show all vscode targets"
-	@echo "  make vscode prepare        - Prepare extension for dev"
-	@echo "  make vscode package        - Package extension"
-	@echo "  make docs serve            - Start docs server"
-	@echo "  make docs build            - Build documentation"
+	@echo "Common Examples:"
+	@echo "  make all install          - Install root + all component dependencies"
+	@echo "  make all ci               - Run CI checks (root linting + all components)"
+	@echo "  make all fix              - Auto-fix linting (root + all components)"
+	@echo "  make all clean            - Clean all components"
+	@echo "  make root ci              - Run root-level CI checks (markdown + YAML lint)"
+	@echo "  make root fix             - Auto-fix root-level linting"
+	@echo "  make root install         - Install root-level dependencies"
+	@echo "  make compiler test-smoke  - Run compiler smoke tests"
+	@echo "  make vscode test-e2e      - Run VS Code E2E tests"
+	@echo "  make docs ci              - Check docs (markdown lint + links)"
+	@echo "  make docs serve           - Start docs server"
+	@echo "  make gh help              - Show GitHub helper commands"
 	@echo ""
-	@echo "=== Release & GitHub Helpers ==="
+	@echo "=== Global Linting ==="
 	@echo ""
-	@echo "Version bumping:"
-	@echo "  bump-patch / bump-minor / bump-major / bump-version-show"
+	@echo "  lint-markdown       - Auto-fix markdown issues"
+	@echo "  lint-markdown-check - Check markdown without fixing"
+	@echo "  lint-yaml           - Auto-fix YAML issues"
+	@echo "  lint-yaml-check     - Check YAML without fixing"
 	@echo ""
-	@echo "GitHub workflow helpers (for Claude Code Action):"
-	@echo "  gh-get-review-threads / gh-resolve-review-thread / gh-get-latest-review"
-	@echo "  gh-check-latest-review / gh-get-comments-since / gh-minimize-outdated-comments"
-	@echo "  gh-check-repo-activity"
+	@echo "=== Version Bumping ==="
+	@echo ""
+	@echo "  bump-patch         - Bump patch version (x.y.Z)"
+	@echo "  bump-minor         - Bump minor version (x.Y.0)"
+	@echo "  bump-major         - Bump major version (X.0.0)"
+	@echo "  bump-version-show  - Show current version"
 
-# Component iteration helper
-# Run target in component
-define run-in-component
-	@echo "→ Running $(2) in $(1)..."
-	@cd $(1) && $(MAKE) $(2)
+# Root-level targets (run linting checks)
+root-ci:
+	$(call print_start, "Running root-level CI checks")
 	@echo ""
-endef
-
-install:
-	@echo "Installing all component dependencies..."
-	@echo ""
-	$(call run-in-component,compiler,install)
-	$(call run-in-component,vscode-extension,install)
-	@echo "→ Installing global tools..."
-	@if command -v npm > /dev/null 2>&1; then \
-		npm install -g markdownlint-cli; \
-	else \
-		echo "⚠ Skipping markdownlint-cli (npm not installed)"; \
-	fi
-	@echo ""
-	@echo "✓ All dependencies installed"
-
-# Component CI targets for parallel execution
-# Use `make check -j3` for parallel execution, `make check` for sequential
-compiler-ci:
-	@echo "→ Running compiler CI..."
-	@cd compiler && $(MAKE) ci
-	@echo ""
-
-vscode-ci:
-	@echo "→ Running vscode-extension CI..."
-	@cd vscode-extension && $(MAKE) ci
-	@echo ""
-
-markdown-ci:
-	@echo "→ Checking markdown..."
 	@$(MAKE) lint-markdown-check
 	@echo ""
-
-check: compiler-ci vscode-ci markdown-ci
-	@echo "✓ All fast checks passed!"
-
-ci: check test-e2e
-	@echo "✓ Comprehensive CI checks passed (matches GitHub Actions)!"
-
-fix:
-	@echo "Auto-fixing linting issues across all components..."
+	@$(MAKE) lint-yaml-check
 	@echo ""
-	$(call run-in-component,compiler,fix)
-	$(call run-in-component,vscode-extension,fix)
-	@echo "→ Fixing markdown issues..."
+	$(call print_end, "Root-level CI checks passed")
+
+root-fix:
+	$(call print_start, "Running root-level lint fixes")
+	@echo ""
 	@$(MAKE) lint-markdown
 	@echo ""
-	@echo "✓ All fixes complete"
-
-test-unit:
-	@echo "Running unit tests across all components..."
+	@$(MAKE) lint-yaml
 	@echo ""
-	$(call run-in-component,compiler,test)
-	$(call run-in-component,vscode-extension,test-unit)
-	@echo "✓ All unit tests passed"
+	$(call print_end, "Root-level lint fixes complete")
 
-test-e2e:
-	@echo "Running end-to-end tests..."
-	@echo ""
-	$(call run-in-component,vscode-extension,test-e2e)
-	@echo "✓ E2E tests passed"
+root-install:
+	$(call print_start, "Installing root-level dependencies")
+	@if command -v npm > /dev/null 2>&1; then \
+		if ! command -v markdownlint > /dev/null 2>&1; then \
+			npm install -g markdownlint-cli $(INDENT); \
+			printf "✓ markdownlint-cli installed\n"; \
+		else \
+			printf "✓ markdownlint-cli already installed\n"; \
+		fi; \
+	else \
+		echo "⚠ npm not found - markdownlint-cli will not be installed"; \
+		echo "  Install Node.js to enable markdown linting"; \
+	fi
+	$(call print_end, "Root-level dependencies installed")
+
+# Root passthrough (allows "make root <target>")
+root:
+	@target="$(_ARGS)"; \
+	if [ -z "$$target" ]; then \
+		echo "Usage: make root <target>"; \
+		echo "Available targets: ci, fix, install"; \
+		exit 1; \
+	fi; \
+	$(MAKE) root-$$target
+
+# Run target across root + all components
+# Usage: make all <target>
+all:
+	@target="$(filter-out $@,$(MAKECMDGOALS))"; \
+	if [ -z "$$target" ]; then \
+		echo "Usage: make all <target>"; \
+		echo "Example: make all clean"; \
+		exit 1; \
+	fi; \
+	if [ "$$target" = "ci" ] || [ "$$target" = "fix" ] || [ "$$target" = "install" ]; then \
+		printf "Root\n"; \
+		$(MAKE) root-$$target || exit 1; \
+		echo ""; \
+	fi; \
+	for component in $(COMPONENTS); do \
+		printf "Component: %s\n" "$$component"; \
+		$(MAKE) -C $$component $$target || exit 1; \
+	done; \
+	printf "✓ All components: %s complete\n" "$$target"
 
 # Markdown linting (global)
 lint-markdown:
-	@echo "Running markdownlint --fix..."
-	markdownlint --fix -c .markdownlint.jsonc .
+	$(call run_cmd, "Running markdownlint --fix", markdownlint --fix -c .markdownlint.jsonc ., "Markdown linting complete")
 
 lint-markdown-check:
-	@echo "Running markdownlint..."
-	@markdownlint -c .markdownlint.jsonc . > /dev/null 2>&1 && echo "✓ Markdown checks passed" || (markdownlint -c .markdownlint.jsonc . && exit 1)
+	$(call run_cmd, "Running markdownlint", markdownlint -c .markdownlint.jsonc ., "Markdown checks passed")
 
-# Cleaning
-clean:
-	@echo "Cleaning all components..."
-	@echo ""
-	$(call run-in-component,compiler,clean)
-	$(call run-in-component,vscode-extension,clean)
-	@echo "✓ Cleaning complete"
+# YAML linting (global)
+lint-yaml:
+	$(call run_cmd, "Running yamlfix", uv run --group dev yamlfix $(YAMLFIX_EXCLUDE) ., "YAML linting complete")
 
-clean-full:
-	@echo "Deep cleaning all components..."
-	@echo ""
-	$(call run-in-component,compiler,clean-full)
-	$(call run-in-component,vscode-extension,clean)
-	@echo "✓ Deep cleaning complete"
-
-check-docs:
-	@echo "Checking documentation (lint + links)..."
-	@echo ""
-	@$(MAKE) lint-markdown-check
-	@$(call run-in-component,docs,test-links)
-	@echo ""
-	@echo "✓ Documentation checks passed"
-
-# GitHub Workflow Helper Commands
-gh-get-review-threads:
-	@.github/scripts/gh-get-review-threads.sh $(filter-out $@,$(MAKECMDGOALS))
-
-gh-resolve-review-thread:
-	@.github/scripts/gh-resolve-review-thread.sh $(filter-out $@,$(MAKECMDGOALS))
-
-gh-get-latest-review:
-	@.github/scripts/gh-get-latest-review.sh $(filter-out $@,$(MAKECMDGOALS))
-
-gh-check-latest-review:
-	@.github/scripts/gh-check-latest-review.sh $(filter-out $@,$(MAKECMDGOALS))
-
-gh-get-comments-since:
-	@.github/scripts/gh-get-comments-since.sh $(filter-out $@,$(MAKECMDGOALS))
-
-gh-minimize-outdated-comments:
-	@.github/scripts/gh-minimize-outdated-comments.sh $(filter-out $@,$(MAKECMDGOALS))
-
-gh-check-repo-activity:
-	@.github/scripts/gh-check-repo-activity.sh $(filter-out $@,$(MAKECMDGOALS))
+lint-yaml-check:
+	$(call run_cmd, "Running yamlfix --check", uv run --group dev yamlfix --check $(YAMLFIX_EXCLUDE) ., "YAML checks passed")
 
 # Version bumping
+BUMP_VERSION_SCRIPT := uv run scripts/bump-version.py
+
 bump-patch:
-	@uv run scripts/bump-version.py patch
+	@$(BUMP_VERSION_SCRIPT) patch
 
 bump-minor:
-	@uv run scripts/bump-version.py minor
+	@$(BUMP_VERSION_SCRIPT) minor
 
 bump-major:
-	@uv run scripts/bump-version.py major
+	@$(BUMP_VERSION_SCRIPT) major
 
 bump-version-show:
-	@uv run scripts/bump-version.py show
+	@$(BUMP_VERSION_SCRIPT) show
 
 # Component pass-through targets
-# These allow running any target in a component's Makefile directly from the root
-# Example: `make compiler test` runs `make test` in compiler/
+# This hack prevents the parent Makefile from trying to execute the arguments
+# as its own targets after passing them to sub-makes.
+# For each pass-through target, we extract the remaining arguments and turn them
+# into do-nothing targets using $(eval).
+#
+# Note: If arguments match existing root targets (e.g., "help"), Make will print
+# "overriding commands for target" warnings. These warnings are expected and harmless.
+# To suppress them, pipe the make command: make compiler help 2>/dev/null
+_FIRST_GOAL := $(firstword $(MAKECMDGOALS))
+
+ifeq ($(_FIRST_GOAL),compiler)
+  _ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  $(eval $(_ARGS):;@:)
+endif
+
+ifeq ($(_FIRST_GOAL),vscode)
+  _ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  $(eval $(_ARGS):;@:)
+endif
+
+ifeq ($(_FIRST_GOAL),docs)
+  _ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  $(eval $(_ARGS):;@:)
+endif
+
+ifeq ($(_FIRST_GOAL),gh)
+  _ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  $(eval $(_ARGS):;@:)
+endif
+
+ifeq ($(_FIRST_GOAL),root)
+  _ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  $(eval $(_ARGS):;@:)
+endif
+
 compiler:
-	@cd compiler && $(MAKE) $(filter-out $@,$(MAKECMDGOALS))
+	@$(MAKE) SHELL=$(MAKE_SHELL) -C packages/kb-dashboard-compiler $(_ARGS)
 
 vscode:
-	@cd vscode-extension && $(MAKE) $(filter-out $@,$(MAKECMDGOALS))
+	@$(MAKE) SHELL=$(MAKE_SHELL) -C vscode-extension $(_ARGS)
 
 docs:
-	@cd docs && $(MAKE) $(filter-out $@,$(MAKECMDGOALS))
+	@$(MAKE) SHELL=$(MAKE_SHELL) -C packages/kb-dashboard-docs $(_ARGS)
 
-# Prevent make from trying to build targets passed as arguments to scripts
-%:
-	@:
+gh:
+	@$(MAKE) SHELL=$(MAKE_SHELL) -C .github/scripts $(_ARGS)
+
+# Prevent make from trying to build targets passed as arguments to 'all'
+# Without this, 'make all clean' would try to run 'clean' after the all target completes
+ifeq ($(_FIRST_GOAL),all)
+  _ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  $(eval $(_ARGS):;@:)
+endif

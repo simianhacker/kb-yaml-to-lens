@@ -16,7 +16,7 @@ make bump-patch    # or bump-minor/bump-major
 # Preview changes first: uv run scripts/bump-version.py patch --dry-run
 
 # 2. Commit and tag
-git add compiler/pyproject.toml vscode-extension/package.json pyproject.toml
+git add packages/kb-dashboard-compiler/pyproject.toml vscode-extension/package.json pyproject.toml
 git commit -m "chore: Bump version to 1.0.0"
 git tag v1.0.0
 git push origin main && git push origin v1.0.0
@@ -40,7 +40,7 @@ Follow [SemVer](https://semver.org/): `v{major}.{minor}.{patch}`
 **Before tagging:**
 
 - [ ] All PRs merged to `main`
-- [ ] CI passes: `make ci`
+- [ ] CI passes: `make all ci`
 - [ ] Versions updated: `make bump-patch` (or `bump-minor`/`bump-major`)
 
 **After tagging:**
@@ -75,14 +75,14 @@ Follow [SemVer](https://semver.org/): `v{major}.{minor}.{patch}`
 
 ```bash
 # PyPI (uses Makefile targets)
-cd compiler && make build && make publish
+make compiler build && make compiler publish
 
 # Docker (multi-arch - prefer re-running workflow)
 # Manual single-arch build for testing only:
-cd compiler && docker build -t ghcr.io/strawgate/kb-yaml-to-lens/kb-dashboard-compiler:1.0.0 .
+cd packages/kb-dashboard-compiler && docker build -t ghcr.io/strawgate/kb-yaml-to-lens/kb-dashboard-compiler:1.0.0 .
 
 # VS Code (publishes to both VS Code Marketplace and Open VSX)
-cd vscode-extension && make package && npx vsce publish && npx ovsx publish *.vsix
+make vscode package && cd vscode-extension && npx vsce publish && npx ovsx publish *.vsix
 ```
 
 **Do not delete tags/releases** - breaks user installations. Instead: mark as pre-release or publish patch.

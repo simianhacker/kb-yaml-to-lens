@@ -21,7 +21,7 @@ See DEVELOPING.md above.
 - **Read first** — Read component AGENTS.md before working in that component
 - **Search, don't speculate** — Use Grep/Glob to find existing patterns
 - **Follow patterns** — Match existing code style unless justified to diverge
-- **Verify** — Run `make check`, test actual functionality
+- **Verify** — Run `make all ci`, test actual functionality
 - **Be honest** — Document unresolved items, acknowledge uncertainty
 - **Zero slop** — No obvious comments, no "this now does X" comparisons
 
@@ -57,7 +57,7 @@ See DEVELOPING.md above.
 
 Read the component-specific AGENTS.md before working in that component:
 
-- **Compiler (Python):** [compiler/AGENTS.md](compiler/AGENTS.md)
+- **Compiler (Python):** [packages/kb-dashboard-compiler/AGENTS.md](packages/kb-dashboard-compiler/AGENTS.md)
 - **VS Code Extension (TypeScript):** [vscode-extension/AGENTS.md](vscode-extension/AGENTS.md)
 
 ---
@@ -68,10 +68,10 @@ Specialized guides for LLM-driven dashboard creation tasks:
 
 | Workflow | When to Use |
 | -------- | ----------- |
-| [OTel Dashboard Guide](docs/content/llm-workflows/otel-dashboard-guide.md) | Creating dashboards from OpenTelemetry Collector receiver data |
-| [ES\|QL Language Reference](docs/content/llm-workflows/esql-language-reference.md) | Writing ES\|QL queries for dashboard panels |
-| [Dashboard Decompiling Guide](docs/content/dashboard-decompiling-guide.md) | Converting existing Kibana JSON dashboards to YAML |
-| [Dashboard Style Guide](docs/content/dashboard-style-guide.md) | Layout, sizing, and design patterns |
+| [OTel Dashboard Guide](packages/kb-dashboard-docs/content/llm-workflows/otel-dashboard-guide.md) | Creating dashboards from OpenTelemetry Collector receiver data |
+| [ES\|QL Language Reference](packages/kb-dashboard-docs/content/llm-workflows/esql-language-reference.md) | Writing ES\|QL queries for dashboard panels |
+| [Dashboard Decompiling Guide](packages/kb-dashboard-docs/content/dashboard-decompiling-guide.md) | Converting existing Kibana JSON dashboards to YAML |
+| [Dashboard Style Guide](packages/kb-dashboard-docs/content/dashboard-style-guide.md) | Layout, sizing, and design patterns |
 
 ---
 
@@ -79,7 +79,7 @@ Specialized guides for LLM-driven dashboard creation tasks:
 
 | Resource | Location |
 | -------- | -------- |
-| Architecture | `docs/architecture.md` |
-| Getting started | `docs/index.md` |
+| Architecture | `packages/kb-dashboard-docs/content/architecture.md` |
+| Getting started | `packages/kb-dashboard-docs/content/index.md` |
 | Contributing | `CONTRIBUTING.md` |
-| CLI docs | `docs/CLI.md` |
+| CLI docs | `packages/kb-dashboard-docs/content/CLI.md` |
