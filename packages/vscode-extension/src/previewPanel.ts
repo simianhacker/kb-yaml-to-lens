@@ -1,10 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { spawn } from 'child_process';
-import { DashboardCompilerLSP, CompiledDashboard, DashboardGridInfo } from './compiler';
+import { DashboardCompilerLSP, CompiledDashboard, DashboardGridInfo, Grid } from './compiler';
 import { escapeHtml, getLoadingContent, getErrorContent } from './webviewUtils';
-import { ConfigService } from './configService';
-import { BinaryResolver } from './binaryResolver';
 
 export class PreviewPanel {
     private static readonly gridColumns = 48;
@@ -36,15 +33,12 @@ export class PreviewPanel {
     private panel: vscode.WebviewPanel | undefined;
     private currentDashboardPath: string | undefined;
     private currentDashboardIndex: number = 0;
-    private extensionPath: string;
     private mediaPath: vscode.Uri;
 
     constructor(
-        private compiler: DashboardCompilerLSP,
         private context: vscode.ExtensionContext,
-        private configService: ConfigService
+        private compiler: DashboardCompilerLSP
     ) {
-        this.extensionPath = context.extensionPath;
         this.mediaPath = vscode.Uri.joinPath(context.extensionUri, 'media');
     }
 
@@ -136,108 +130,20 @@ export class PreviewPanel {
     }
 
     private async extractGridInfo(dashboardPath: string, dashboardIndex: number = 0): Promise<DashboardGridInfo> {
-        return this.runPythonScript(
-            ['-m', 'dashboard_compiler.lsp.grid_extractor', dashboardPath, dashboardIndex.toString()],
-            'Grid extraction',
-            (stdout) => {
-                const result = JSON.parse(stdout.trim());
-                if (result.error) {
-                    throw new Error(result.error);
-                }
-                if (!result || typeof result !== 'object' || !Array.isArray(result.panels)) {
-                    throw new Error('Invalid grid extractor output (expected { title, description, panels[] })');
-                }
-                return result;
-            }
-        );
+        return this.compiler.getGridLayout(dashboardPath, dashboardIndex);
     }
 
-    private async runPythonScript<T = unknown>(
-        args: string[],
-        errorContext: string,
-        parseResult: (stdout: string) => T,
-        timeout: number = 30000
-    ): Promise<T> {
-        const resolver = new BinaryResolver(this.extensionPath, this.configService);
-        const resolved = resolver.resolveForScripts();
-
-        const fullArgs = [...resolved.args, ...args];
-
-        return new Promise((resolve, reject) => {
-            let settled = false;
-            const settleReject = (err: Error) => {
-                if (settled) {
-                    return;
-                }
-                settled = true;
-                reject(err);
-            };
-            const settleResolve = (val: T) => {
-                if (settled) {
-                    return;
-                }
-                settled = true;
-                resolve(val);
-            };
-
-            const child = spawn(resolved.executable, fullArgs, {
-                cwd: resolved.isBundled ? resolved.cwd : path.join(this.extensionPath, '..')
-            });
-
-            let stdout = '';
-            let stderr = '';
-
-            const timeoutHandle = setTimeout(() => {
-                try {
-                    child.kill();
-                } catch {
-                    // ignore
-                }
-                settleReject(new Error(`${errorContext} timed out after ${timeout / 1000} seconds. stderr: ${stderr || '(empty)'}`));
-            }, timeout);
-
-            child.on('error', (err) => {
-                clearTimeout(timeoutHandle);
-                settleReject(new Error(`Failed to start Python: ${err.message}`));
-            });
-
-            child.stdout.on('data', (data) => {
-                stdout += data.toString();
-            });
-
-            child.stderr.on('data', (data) => {
-                stderr += data.toString();
-            });
-
-            child.on('close', (code) => {
-                clearTimeout(timeoutHandle);
-                if (settled) {
-                    return;
-                }
-                if (code !== 0) {
-                    settleReject(new Error(`${errorContext} failed: ${stderr || stdout}`));
-                    return;
-                }
-
-                try {
-                    settleResolve(parseResult(stdout));
-                } catch (error) {
-                    settleReject(new Error(`Failed to parse result: ${error instanceof Error ? error.message : String(error)}`));
-                }
-            });
-        });
-    }
-
-    private async updatePanelGrid(panelId: string, grid: { x: number; y: number; w: number; h: number }): Promise<void> {
+    private async updatePanelGrid(panelId: string, grid: Grid): Promise<void> {
         if (!this.currentDashboardPath) {
             return;
         }
 
         try {
-            await this.runPythonScript(
-                ['-m', 'dashboard_compiler.lsp.grid_updater', this.currentDashboardPath, panelId, JSON.stringify(grid), this.currentDashboardIndex.toString()],
-                'Grid update',
-                (stdout) => stdout
+            await this.compiler.updateGridLayout(
+                this.currentDashboardPath,
+                panelId,
+                grid,
+                this.currentDashboardIndex
             );
             // Don't refresh preview - the visual state is already correct from the drag,
             // and refreshing causes an annoying "Compiling..." flash. The YAML is updated,
