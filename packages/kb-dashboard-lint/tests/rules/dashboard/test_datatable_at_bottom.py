@@ -2,17 +2,17 @@
 
 import pytest
 
-from dashboard_compiler.dashboard.config import Dashboard
-from dashboard_compiler.panels.charts.config import (
+from dashboard_lint.rules.dashboard import DatatableAtBottomRule
+from dashboard_lint.types import Severity
+from kb_dashboard_core.dashboard.config import Dashboard
+from kb_dashboard_core.panels.charts.config import (
     LensDatatablePanelConfig,
     LensMetricPanelConfig,
     LensPanel,
 )
-from dashboard_compiler.panels.charts.lens.dimensions.config import LensTermsDimension
-from dashboard_compiler.panels.charts.lens.metrics.config import LensCountAggregatedMetric
-from dashboard_compiler.panels.config import Position
-from dashboard_lint.rules.dashboard import DatatableAtBottomRule
-from dashboard_lint.types import Severity
+from kb_dashboard_core.panels.charts.lens.dimensions.config import LensTermsDimension
+from kb_dashboard_core.panels.charts.lens.metrics.config import LensCountAggregatedMetric
+from kb_dashboard_core.panels.config import Position
 
 
 @pytest.fixture

@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass
 
-from dashboard_compiler.panels.charts.config import ESQLPanel, LensPanel
 from dashboard_lint.esql_helpers import (
     SINGLE_EQUALS_IN_WHERE_PATTERN,
     SQL_LIKE_WILDCARD_PATTERN,
@@ -13,6 +12,7 @@ from dashboard_lint.esql_helpers import (
 )
 from dashboard_lint.rules.core import ChartContext, ChartRule, EmptyOptions, ViolationResult, chart_rule
 from dashboard_lint.types import Severity, Violation
+from kb_dashboard_core.panels.charts.config import ESQLPanel, LensPanel
 
 
 @chart_rule

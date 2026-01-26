@@ -2,13 +2,13 @@
 
 import pytest
 
-from dashboard_compiler.dashboard.config import Dashboard
-from dashboard_compiler.panels.charts.config import ESQLPanel, ESQLPiePanelConfig, LensPanel, LensPiePanelConfig
-from dashboard_compiler.panels.charts.esql.columns.config import ESQLDimension, ESQLMetric
-from dashboard_compiler.panels.charts.lens.dimensions.config import LensTermsDimension
-from dashboard_compiler.panels.charts.lens.metrics.config import LensCountAggregatedMetric
 from dashboard_lint.rules.chart import PieMissingLimitRule
 from dashboard_lint.types import Severity
+from kb_dashboard_core.dashboard.config import Dashboard
+from kb_dashboard_core.panels.charts.config import ESQLPanel, ESQLPiePanelConfig, LensPanel, LensPiePanelConfig
+from kb_dashboard_core.panels.charts.esql.columns.config import ESQLDimension, ESQLMetric
+from kb_dashboard_core.panels.charts.lens.dimensions.config import LensTermsDimension
+from kb_dashboard_core.panels.charts.lens.metrics.config import LensCountAggregatedMetric
 
 
 @pytest.fixture

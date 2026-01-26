@@ -4,8 +4,10 @@ from dataclasses import dataclass
 
 from pydantic import BaseModel, Field
 
-from dashboard_compiler.panels.charts.base.config import LegendVisibleEnum
-from dashboard_compiler.panels.charts.config import (
+from dashboard_lint.rules.core import ChartContext, ChartRule, ViolationResult, chart_rule
+from dashboard_lint.types import Severity, Violation
+from kb_dashboard_core.panels.charts.base.config import LegendVisibleEnum
+from kb_dashboard_core.panels.charts.config import (
     ESQLAreaPanelConfig,
     ESQLBarPanelConfig,
     ESQLLinePanelConfig,
@@ -15,8 +17,6 @@ from dashboard_compiler.panels.charts.config import (
     LensLinePanelConfig,
     LensPanel,
 )
-from dashboard_lint.rules.core import ChartContext, ChartRule, ViolationResult, chart_rule
-from dashboard_lint.types import Severity, Violation
 
 type XYPanelConfig = (
     LensLinePanelConfig | LensBarPanelConfig | LensAreaPanelConfig | ESQLLinePanelConfig | ESQLBarPanelConfig | ESQLAreaPanelConfig

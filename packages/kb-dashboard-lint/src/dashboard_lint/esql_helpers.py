@@ -5,7 +5,7 @@ This module provides utilities for analyzing ES|QL queries in lint rules.
 
 import re
 
-from dashboard_compiler.panels.charts.config import (
+from kb_dashboard_core.panels.charts.config import (
     ESQLAreaPanelConfig,
     ESQLBarPanelConfig,
     ESQLDatatablePanelConfig,
@@ -17,7 +17,7 @@ from dashboard_compiler.panels.charts.config import (
     ESQLPiePanelConfig,
     ESQLTagcloudPanelConfig,
 )
-from dashboard_compiler.queries.config import ESQLQuery
+from kb_dashboard_core.queries.config import ESQLQuery
 
 type ESQLConfig = (
     ESQLMetricPanelConfig
