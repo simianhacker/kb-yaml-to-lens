@@ -20,6 +20,52 @@ These dashboards provide detailed visibility into cluster health, node performan
 
 All dashboards include navigation links for easy switching between views.
 
+## Dashboard Definitions
+
+<!-- markdownlint-disable MD046 -->
+??? example "Cluster Overview (01-cluster-overview.yaml)"
+
+    ```yaml
+    --8<-- "examples/elasticsearch_otel/01-cluster-overview.yaml"
+    ```
+
+??? example "Node Overview (02-node-overview.yaml)"
+
+    ```yaml
+    --8<-- "examples/elasticsearch_otel/02-node-overview.yaml"
+    ```
+
+??? example "Node Metrics (03-node-metrics.yaml)"
+
+    ```yaml
+    --8<-- "examples/elasticsearch_otel/03-node-metrics.yaml"
+    ```
+
+??? example "Index Metrics (04-index-metrics.yaml)"
+
+    ```yaml
+    --8<-- "examples/elasticsearch_otel/04-index-metrics.yaml"
+    ```
+
+??? example "JVM Health (05-jvm-health.yaml)"
+
+    ```yaml
+    --8<-- "examples/elasticsearch_otel/05-jvm-health.yaml"
+    ```
+
+??? example "Circuit Breakers (06-circuit-breakers.yaml)"
+
+    ```yaml
+    --8<-- "examples/elasticsearch_otel/06-circuit-breakers.yaml"
+    ```
+
+??? example "Cluster Metadata (07-cluster-metadata.yaml)"
+
+    ```yaml
+    --8<-- "examples/elasticsearch_otel/07-cluster-metadata.yaml"
+    ```
+<!-- markdownlint-enable MD046 -->
+
 ## Prerequisites
 
 - **Elasticsearch**: Version 7.x or 8.x with `monitor` or `manage` cluster privileges

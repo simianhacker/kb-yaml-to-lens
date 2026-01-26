@@ -15,6 +15,22 @@ These dashboards provide comprehensive monitoring for MySQL database instances, 
 
 Both dashboards include navigation links for easy switching between views.
 
+## Dashboard Definitions
+
+<!-- markdownlint-disable MD046 -->
+??? example "Overview (mysql-overview-esql.yaml)"
+
+    ```yaml
+    --8<-- "examples/mysql_otel/mysql-overview-esql.yaml"
+    ```
+
+??? example "Extended (mysql-extended-esql.yaml)"
+
+    ```yaml
+    --8<-- "examples/mysql_otel/mysql-extended-esql.yaml"
+    ```
+<!-- markdownlint-enable MD046 -->
+
 ## Prerequisites
 
 - **MySQL**: MySQL 5.7+ or 8.x database server

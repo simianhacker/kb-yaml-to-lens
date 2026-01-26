@@ -20,6 +20,40 @@ The **k8sclusterreceiver** is an OpenTelemetry Collector receiver that collects 
 
 All dashboards include navigation links for easy switching between views.
 
+## Dashboard Definitions
+
+<!-- markdownlint-disable MD046 -->
+??? example "Cluster Overview (01-cluster-overview.yaml)"
+
+    ```yaml
+    --8<-- "examples/k8s_cluster_otel/01-cluster-overview.yaml"
+    ```
+
+??? example "Workload Health (02-workload-health.yaml)"
+
+    ```yaml
+    --8<-- "examples/k8s_cluster_otel/02-workload-health.yaml"
+    ```
+
+??? example "Resource Allocation (03-resource-allocation.yaml)"
+
+    ```yaml
+    --8<-- "examples/k8s_cluster_otel/03-resource-allocation.yaml"
+    ```
+
+??? example "Batch Jobs (04-batch-jobs.yaml)"
+
+    ```yaml
+    --8<-- "examples/k8s_cluster_otel/04-batch-jobs.yaml"
+    ```
+
+??? example "Autoscaling (05-autoscaling.yaml)"
+
+    ```yaml
+    --8<-- "examples/k8s_cluster_otel/05-autoscaling.yaml"
+    ```
+<!-- markdownlint-enable MD046 -->
+
 ## Prerequisites
 
 - **Kubernetes cluster**: v1.24+

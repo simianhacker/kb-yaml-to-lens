@@ -16,6 +16,28 @@ These dashboards provide comprehensive monitoring for Redis instances, including
 
 All dashboards include navigation links for easy switching between views.
 
+## Dashboard Definitions
+
+<!-- markdownlint-disable MD046 -->
+??? example "Overview (overview.yaml)"
+
+    ```yaml
+    --8<-- "examples/redis_otel/overview.yaml"
+    ```
+
+??? example "Instance Details (instance-details.yaml)"
+
+    ```yaml
+    --8<-- "examples/redis_otel/instance-details.yaml"
+    ```
+
+??? example "Database Metrics (database-metrics.yaml)"
+
+    ```yaml
+    --8<-- "examples/redis_otel/database-metrics.yaml"
+    ```
+<!-- markdownlint-enable MD046 -->
+
 ## Prerequisites
 
 - **Redis**: Redis server instances (6.x or later recommended)

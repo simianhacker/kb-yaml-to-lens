@@ -17,6 +17,22 @@ These dashboards provide comprehensive monitoring for Docker containers includin
 
 All dashboards include navigation links for easy switching between views.
 
+## Dashboard Definitions
+
+<!-- markdownlint-disable MD046 -->
+??? example "Containers Overview (01-containers-overview.yaml)"
+
+    ```yaml
+    --8<-- "examples/docker_otel/01-containers-overview.yaml"
+    ```
+
+??? example "Container Stats (02-container-stats.yaml)"
+
+    ```yaml
+    --8<-- "examples/docker_otel/02-container-stats.yaml"
+    ```
+<!-- markdownlint-enable MD046 -->
+
 ## Prerequisites
 
 - **Docker**: Docker Engine with containers running

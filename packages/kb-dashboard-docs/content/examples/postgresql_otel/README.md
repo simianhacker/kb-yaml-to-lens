@@ -12,6 +12,16 @@ This dashboard provides visibility into PostgreSQL database performance, connect
 |-----------|------|-------------|
 | **Overview** | `02-overview-esql.yaml` | ES\|QL-based overview with KPIs, time series charts, and database metrics |
 
+## Dashboard Definitions
+
+<!-- markdownlint-disable MD046 -->
+??? example "Overview (02-overview-esql.yaml)"
+
+    ```yaml
+    --8<-- "examples/postgresql_otel/02-overview-esql.yaml"
+    ```
+<!-- markdownlint-enable MD046 -->
+
 ## Prerequisites
 
 - **PostgreSQL**: PostgreSQL database server

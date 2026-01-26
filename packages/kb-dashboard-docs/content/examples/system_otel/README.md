@@ -20,6 +20,40 @@ These dashboards provide monitoring for infrastructure with OpenTelemetry, cover
 
 All dashboards include navigation links for easy switching between views.
 
+## Dashboard Definitions
+
+<!-- markdownlint-disable MD046 -->
+??? example "Hosts Overview (01-hosts-overview.yaml)"
+
+    ```yaml
+    --8<-- "examples/system_otel/01-hosts-overview.yaml"
+    ```
+
+??? example "Host Details - Overview (02-host-details-overview.yaml)"
+
+    ```yaml
+    --8<-- "examples/system_otel/02-host-details-overview.yaml"
+    ```
+
+??? example "Host Details - Metrics (03-host-details-metrics.yaml)"
+
+    ```yaml
+    --8<-- "examples/system_otel/03-host-details-metrics.yaml"
+    ```
+
+??? example "Host Details - Metadata (04-host-details-metadata.yaml)"
+
+    ```yaml
+    --8<-- "examples/system_otel/04-host-details-metadata.yaml"
+    ```
+
+??? example "Host Details - Logs (05-host-details-logs.yaml)"
+
+    ```yaml
+    --8<-- "examples/system_otel/05-host-details-logs.yaml"
+    ```
+<!-- markdownlint-enable MD046 -->
+
 ## Prerequisites
 
 - **OpenTelemetry Collector**: Collector with Host Metrics receiver configured
