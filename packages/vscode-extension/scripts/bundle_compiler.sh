@@ -18,7 +18,7 @@ mkdir -p "$BUNDLE_DIR"
 
 # Copy essential files
 cp "$COMPILER_SRC/pyproject.toml" "$BUNDLE_DIR/"
-cp "$COMPILER_SRC/uv.lock" "$BUNDLE_DIR/"
+cp "$PROJECT_ROOT/uv.lock" "$BUNDLE_DIR/"
 cp "$COMPILER_SRC/README.md" "$BUNDLE_DIR/"
 
 # Copy source code
