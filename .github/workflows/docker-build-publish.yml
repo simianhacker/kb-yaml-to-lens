@@ -46,4 +46,4 @@ jobs:
       - name: Build and push multi-arch Docker image
         shell: bash
         run: |
-          make -C packages/kb-dashboard-cli CONFIRM_PUBLISH=yes DOCKER_TAGS="${{ steps.meta.outputs.tags }}" docker-publish
+          make -C packages/kb-dashboard-cli SHELL=/bin/bash CONFIRM_PUBLISH=yes DOCKER_TAGS="${{ steps.meta.outputs.tags }}" docker-publish
