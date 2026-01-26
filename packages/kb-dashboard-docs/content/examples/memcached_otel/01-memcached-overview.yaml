@@ -108,6 +108,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: hit_ratio
               label: Hit Ratio
@@ -130,6 +132,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: ops_rate
               label: Operations/sec
@@ -153,6 +157,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: cmd_rate
               label: Commands/sec
@@ -174,6 +180,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: cpu_rate
               label: CPU Time (sec/sec)
@@ -193,6 +201,8 @@ dashboards:
             | SORT time_bucket ASC
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: items
               label: Current Items
@@ -210,6 +220,8 @@ dashboards:
             | SORT time_bucket ASC
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: bytes
               label: Bytes Used
@@ -229,6 +241,8 @@ dashboards:
             | SORT time_bucket ASC
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: evictions_rate
               label: Evictions/sec
@@ -244,6 +258,8 @@ dashboards:
             | SORT time_bucket ASC
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: connections
               label: Current Connections
@@ -261,6 +277,8 @@ dashboards:
             | SORT time_bucket ASC
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: conn_rate
               label: New Connections/sec
@@ -280,6 +298,8 @@ dashboards:
             | SORT time_bucket ASC
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: bytes_rate
               label: Received Bytes/sec
@@ -299,6 +319,8 @@ dashboards:
             | SORT time_bucket ASC
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: bytes_rate
               label: Sent Bytes/sec

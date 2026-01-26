@@ -162,6 +162,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: memory
               label: Memory Used
@@ -187,6 +189,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: commands
               label: Commands/sec
@@ -210,6 +214,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: clients
               label: Connected Clients
@@ -237,6 +243,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: hits
               label: Hits/sec
@@ -265,6 +273,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: evicted
               label: Evicted/sec
@@ -288,6 +298,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: expired
               label: Expired/sec
@@ -317,6 +329,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: input
               label: Input
@@ -343,6 +357,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: output
               label: Output
@@ -372,7 +388,12 @@ dashboards:
             - LIMIT 100
           dimensions:
             - field: instance
+              label: Instance
             - field: memory
+              label: Memory Used
             - field: clients
+              label: Clients
             - field: commands
+              label: Commands/sec
             - field: fragmentation
+              label: Fragmentation Ratio

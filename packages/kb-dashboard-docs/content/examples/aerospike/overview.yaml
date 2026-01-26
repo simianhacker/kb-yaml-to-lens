@@ -110,9 +110,13 @@ dashboards:
             - LIMIT 100
           dimensions:
             - field: node
+              label: Node
             - field: namespaces
+              label: Namespaces
             - field: memory_free
+              label: Memory Free %
             - field: connections
+              label: Connections
 
       # Memory Free Over Time
       - title: Memory Free Over Time
@@ -130,6 +134,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: memory_free
               label: Memory Free %
@@ -155,6 +161,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: connections
               label: Open Connections
@@ -183,6 +191,7 @@ dashboards:
                 suffix: '%'
           dimensions:
             - field: node
+              label: Node
           appearance:
             donut: medium
       - title: Connections by Node
@@ -203,5 +212,6 @@ dashboards:
                 type: number
           dimensions:
             - field: node
+              label: Node
           appearance:
             donut: medium

@@ -123,6 +123,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: memory_free
               label: Memory Free %
@@ -155,6 +157,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: connections
               label: Open Connections
@@ -181,6 +185,8 @@ dashboards:
             position: right
           dimension:
             field: time_bucket
+            label: Time
+            data_type: date
           metrics:
             - field: connections
               label: Connections
@@ -206,5 +212,8 @@ dashboards:
             - LIMIT 100
           dimensions:
             - field: node
+              label: Node
             - field: memory_free
+              label: Memory Free %
             - field: connections_open
+              label: Open Connections
