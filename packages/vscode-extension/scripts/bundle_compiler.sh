@@ -6,7 +6,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 EXTENSION_ROOT="$(dirname "$SCRIPT_DIR")"
-PROJECT_ROOT="$(dirname "$EXTENSION_ROOT")"
+PROJECT_ROOT="$(dirname "$(dirname "$EXTENSION_ROOT")")"
 COMPILER_SRC="$PROJECT_ROOT/packages/kb-dashboard-cli"
 BUNDLE_DIR="$EXTENSION_ROOT/compiler"
 
