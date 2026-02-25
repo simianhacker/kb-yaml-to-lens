@@ -431,9 +431,9 @@ def compile_xy_chart_visualization_state(
         or y_right_show_title is False
     ):
         axis_titles_visibility = AxisTitlesVisibilitySettings(
-            x=False if x_show_title is False else x_title is not None,
-            yLeft=False if y_left_show_title is False else y_left_title is not None,
-            yRight=False if y_right_show_title is False else y_right_title is not None,
+            x=x_show_title,
+            yLeft=y_left_show_title,
+            yRight=y_right_show_title,
         )
 
     kbn_layer_visualization = XYDataLayerConfig(

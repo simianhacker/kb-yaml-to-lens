@@ -912,7 +912,7 @@ async def test_dual_axis_chart() -> None:
     assert kbn_state_visualization.axisTitlesVisibilitySettings is not None
     assert kbn_state_visualization.axisTitlesVisibilitySettings.yLeft is True
     assert kbn_state_visualization.axisTitlesVisibilitySettings.yRight is True
-    assert kbn_state_visualization.axisTitlesVisibilitySettings.x is False
+    assert kbn_state_visualization.axisTitlesVisibilitySettings.x is True
 
 
 async def test_styled_series_chart() -> None:
@@ -992,7 +992,7 @@ async def test_axis_extent_configuration() -> None:
     assert kbn_state_visualization.axisTitlesVisibilitySettings is not None
     assert kbn_state_visualization.axisTitlesVisibilitySettings.x is True
     assert kbn_state_visualization.axisTitlesVisibilitySettings.yLeft is True
-    assert kbn_state_visualization.axisTitlesVisibilitySettings.yRight is False
+    assert kbn_state_visualization.axisTitlesVisibilitySettings.yRight is True
 
 
 async def test_axis_title_visibility_respects_show_title_flag() -> None:
