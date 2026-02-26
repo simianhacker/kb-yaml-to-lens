@@ -21,18 +21,41 @@ from kb_dashboard_core.panels.charts.lens.metrics.compile import compile_lens_me
 from kb_dashboard_core.panels.charts.metric.config import ESQLMetricChart, LensMetricChart
 from kb_dashboard_core.panels.charts.metric.view import (
     KbnESQLMetricVisualizationState,
+    KbnMetricPalette,
+    KbnMetricPaletteParams,
+    KbnMetricPaletteStop,
     KbnMetricVisualizationState,
     KbnSecondaryTrendNone,
 )
 
 
-def compile_metric_chart_visualization_state(
+def _build_static_palette(color: str) -> KbnMetricPalette:
+    """Build a Kibana custom palette with a single static color.
+
+    Args:
+        color (str): Hex color code (e.g., '#209280').
+
+    Returns:
+        KbnMetricPalette: The palette object with a single color stop.
+
+    """
+    return KbnMetricPalette(
+        params=KbnMetricPaletteParams(
+            stops=[KbnMetricPaletteStop(color=color, stop=100)],
+            colorStops=[KbnMetricPaletteStop(color=color, stop=0)],
+        )
+    )
+
+
+def compile_metric_chart_visualization_state(  # noqa: PLR0913
     *,
     layer_id: str,
     primary_metric_id: str,
     secondary_metric_id: str | None,
     breakdown_dimension_id: str | None,
     color_mode: Literal['none', 'labels', 'background'] | None,
+    apply_color_to: Literal['background', 'value'] | None,
+    static_color: str | None,
 ) -> KbnMetricVisualizationState:
     """Compile a LensMetricChart config object into a Kibana Lens Metric visualization state.
 
@@ -42,11 +65,14 @@ def compile_metric_chart_visualization_state(
         secondary_metric_id (str | None): The ID of the secondary metric.
         breakdown_dimension_id (str | None): The ID of the breakdown dimension.
         color_mode (Literal['none', 'labels', 'background'] | None): The metric color mode in Kibana.
+        apply_color_to (Literal['background', 'value'] | None): Where to apply color (Kibana 9.x).
+        static_color (str | None): Hex color for a static single-color palette.
 
     Returns:
         KbnMetricVisualizationState: The compiled visualization state.
 
     """
+    palette = _build_static_palette(static_color) if static_color is not None else None
     return KbnMetricVisualizationState(
         layerId=layer_id,
         metricAccessor=primary_metric_id,
@@ -55,6 +81,8 @@ def compile_metric_chart_visualization_state(
         secondaryMetricAccessor=secondary_metric_id,
         breakdownByAccessor=breakdown_dimension_id,
         colorMode=color_mode,
+        applyColorTo=apply_color_to,
+        palette=palette,
     )
 
 
@@ -116,6 +144,8 @@ def compile_lens_metric_chart(
             secondary_metric_id=secondary_metric_id,
             breakdown_dimension_id=breakdown_dimension_id,
             color_mode=lens_metric_chart.color_mode,
+            apply_color_to=lens_metric_chart.apply_color_to,
+            static_color=lens_metric_chart.static_color,
         ),
     )
 
@@ -159,6 +189,8 @@ def compile_esql_metric_chart(
 
     layer_id = esql_metric_chart.get_id()
 
+    palette = _build_static_palette(esql_metric_chart.static_color) if esql_metric_chart.static_color is not None else None
+
     return (
         layer_id,
         kbn_columns,
@@ -169,5 +201,7 @@ def compile_esql_metric_chart(
             secondaryMetricAccessor=secondary_metric_id,
             breakdownByAccessor=breakdown_dimension_id,
             colorMode=esql_metric_chart.color_mode,
+            applyColorTo=esql_metric_chart.apply_color_to,
+            palette=palette,
         ),
     )

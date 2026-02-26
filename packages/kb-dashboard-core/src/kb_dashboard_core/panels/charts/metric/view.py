@@ -13,6 +13,45 @@ from pydantic import Field
 from kb_dashboard_core.shared.view import BaseVwModel, OmitIfNone
 
 
+class KbnMetricPaletteStop(BaseVwModel):
+    """A single color stop in a Kibana custom palette."""
+
+    color: str = Field(...)
+    """Hex color code for this stop."""
+
+    stop: float = Field(...)
+    """Numeric stop value."""
+
+
+class KbnMetricPaletteParams(BaseVwModel):
+    """Parameters for a Kibana custom palette."""
+
+    steps: int = Field(default=3)
+    name: Literal['custom'] = 'custom'
+    reverse: bool = Field(default=False)
+    rangeType: Literal['number', 'percent'] = Field(default='number')
+    rangeMin: float = Field(default=0)
+    rangeMax: Annotated[float | None, OmitIfNone()] = Field(default=None)
+    progression: Literal['fixed'] = 'fixed'
+    stops: list[KbnMetricPaletteStop] = Field(default_factory=list)
+    colorStops: list[KbnMetricPaletteStop] = Field(default_factory=list)
+    continuity: Literal['above', 'below', 'all', 'none'] = Field(default='above')
+    maxSteps: int = Field(default=5)
+
+
+class KbnMetricPalette(BaseVwModel):
+    """A Kibana custom palette for metric visualizations.
+
+    See Also:
+        Kibana type definition: `PaletteOutput` in
+        https://github.com/elastic/kibana/blob/main/src/platform/packages/shared/kbn-coloring/src/palettes/types.ts
+    """
+
+    name: Literal['custom'] = 'custom'
+    type: Literal['palette'] = 'palette'
+    params: KbnMetricPaletteParams = Field(...)
+
+
 class KbnSecondaryTrendNone(BaseVwModel):
     """View model for a secondary trend configuration with no trend display.
 
@@ -73,6 +112,12 @@ class KbnMetricVisualizationState(BaseVwModel):
     colorMode: Annotated[Literal['none', 'labels', 'background'] | None, OmitIfNone()] = Field(default=None)
     """Color mode for metric value rendering."""
 
+    applyColorTo: Annotated[Literal['background', 'value'] | None, OmitIfNone()] = Field(default=None)
+    """Controls where color is applied: 'background' or 'value' (text). Kibana 9.x property."""
+
+    palette: Annotated[KbnMetricPalette | None, OmitIfNone()] = Field(default=None)
+    """Custom color palette for the metric visualization."""
+
 
 class KbnESQLMetricVisualizationState(BaseVwModel):
     """View model for ES|QL metric visualization state.
@@ -107,3 +152,9 @@ class KbnESQLMetricVisualizationState(BaseVwModel):
 
     colorMode: Annotated[Literal['none', 'labels', 'background'] | None, OmitIfNone()] = Field(default=None)
     """Color mode for metric value rendering."""
+
+    applyColorTo: Annotated[Literal['background', 'value'] | None, OmitIfNone()] = Field(default=None)
+    """Controls where color is applied: 'background' or 'value' (text). Kibana 9.x property."""
+
+    palette: Annotated[KbnMetricPalette | None, OmitIfNone()] = Field(default=None)
+    """Custom color palette for the metric visualization."""

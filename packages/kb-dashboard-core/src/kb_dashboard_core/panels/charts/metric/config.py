@@ -62,6 +62,12 @@ class LensMetricChart(BaseChart):
     color_mode: Literal['none', 'labels', 'background'] | None = Field(default=None)
     """Color mode for metric value rendering."""
 
+    apply_color_to: Literal['background', 'value'] | None = Field(default=None)
+    """Controls where color is applied: 'background' or 'value' (text). Kibana 9.x property."""
+
+    static_color: str | None = Field(default=None)
+    """Hex color code (e.g., '#209280') for a static single-color palette."""
+
 
 class ESQLMetricChart(BaseChart):
     """Represents a Metric chart configuration within an ESQL panel.
@@ -110,3 +116,9 @@ class ESQLMetricChart(BaseChart):
 
     color_mode: Literal['none', 'labels', 'background'] | None = Field(default=None)
     """Color mode for metric value rendering."""
+
+    apply_color_to: Literal['background', 'value'] | None = Field(default=None)
+    """Controls where color is applied: 'background' or 'value' (text). Kibana 9.x property."""
+
+    static_color: str | None = Field(default=None)
+    """Hex color code (e.g., '#209280') for a static single-color palette."""

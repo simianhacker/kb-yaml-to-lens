@@ -418,6 +418,132 @@ def test_compile_metric_chart_color_mode_omitted(chart_type: str) -> None:
     assert 'colorMode' not in result
 
 
+@pytest.mark.parametrize('chart_type', ['lens', 'esql'])
+@pytest.mark.parametrize('apply_color_to', ['value', 'background'])
+def test_compile_metric_chart_apply_color_to(chart_type: str, apply_color_to: str) -> None:
+    """Test metric apply_color_to compilation for Lens and ES|QL charts."""
+    if chart_type == 'lens':
+        config = {
+            'type': 'metric',
+            'data_view': 'metrics-*',
+            'primary': {'aggregation': 'count', 'id': 'primary-metric'},
+            'apply_color_to': apply_color_to,
+        }
+    else:
+        config = {
+            'type': 'metric',
+            'primary': {'field': 'count(*)', 'id': 'primary-metric'},
+            'apply_color_to': apply_color_to,
+        }
+
+    result = compile_metric_chart_snapshot(config, chart_type)
+    assert result['applyColorTo'] == apply_color_to
+
+
+@pytest.mark.parametrize('chart_type', ['lens', 'esql'])
+def test_compile_metric_chart_apply_color_to_omitted(chart_type: str) -> None:
+    """Test that applyColorTo is omitted when not set."""
+    if chart_type == 'lens':
+        config = {
+            'type': 'metric',
+            'data_view': 'metrics-*',
+            'primary': {'aggregation': 'count', 'id': 'primary-metric'},
+        }
+    else:
+        config = {
+            'type': 'metric',
+            'primary': {'field': 'count(*)', 'id': 'primary-metric'},
+        }
+
+    result = compile_metric_chart_snapshot(config, chart_type)
+    assert 'applyColorTo' not in result
+
+
+@pytest.mark.parametrize('chart_type', ['lens', 'esql'])
+def test_compile_metric_chart_static_color(chart_type: str) -> None:
+    """Test that static_color produces a correct palette object."""
+    if chart_type == 'lens':
+        config = {
+            'type': 'metric',
+            'data_view': 'metrics-*',
+            'primary': {'aggregation': 'count', 'id': 'primary-metric'},
+            'static_color': '#209280',
+        }
+    else:
+        config = {
+            'type': 'metric',
+            'primary': {'field': 'count(*)', 'id': 'primary-metric'},
+            'static_color': '#209280',
+        }
+
+    result = compile_metric_chart_snapshot(config, chart_type)
+    assert result['palette'] == snapshot(
+        {
+            'name': 'custom',
+            'type': 'palette',
+            'params': {
+                'steps': 3,
+                'name': 'custom',
+                'reverse': False,
+                'rangeType': 'number',
+                'rangeMin': 0,
+                'progression': 'fixed',
+                'stops': [{'color': '#209280', 'stop': 100}],
+                'colorStops': [{'color': '#209280', 'stop': 0}],
+                'continuity': 'above',
+                'maxSteps': 5,
+            },
+        }
+    )
+
+
+@pytest.mark.parametrize('chart_type', ['lens', 'esql'])
+def test_compile_metric_chart_static_color_omitted(chart_type: str) -> None:
+    """Test that palette is omitted when static_color is not set."""
+    if chart_type == 'lens':
+        config = {
+            'type': 'metric',
+            'data_view': 'metrics-*',
+            'primary': {'aggregation': 'count', 'id': 'primary-metric'},
+        }
+    else:
+        config = {
+            'type': 'metric',
+            'primary': {'field': 'count(*)', 'id': 'primary-metric'},
+        }
+
+    result = compile_metric_chart_snapshot(config, chart_type)
+    assert 'palette' not in result
+
+
+@pytest.mark.parametrize('chart_type', ['lens', 'esql'])
+def test_compile_metric_chart_combined_color_features(chart_type: str) -> None:
+    """Test color_mode, apply_color_to, and static_color all together."""
+    if chart_type == 'lens':
+        config = {
+            'type': 'metric',
+            'data_view': 'metrics-*',
+            'primary': {'aggregation': 'count', 'id': 'primary-metric'},
+            'color_mode': 'labels',
+            'apply_color_to': 'value',
+            'static_color': '#209280',
+        }
+    else:
+        config = {
+            'type': 'metric',
+            'primary': {'field': 'count(*)', 'id': 'primary-metric'},
+            'color_mode': 'labels',
+            'apply_color_to': 'value',
+            'static_color': '#209280',
+        }
+
+    result = compile_metric_chart_snapshot(config, chart_type)
+    assert result['colorMode'] == 'labels'
+    assert result['applyColorTo'] == 'value'
+    assert result['palette']['name'] == 'custom'
+    assert result['palette']['params']['stops'] == [{'color': '#209280', 'stop': 100}]
+
+
 def test_metric_chart_dashboard_references_bubble_up() -> None:
     """Test that metric chart data view references bubble up to dashboard level correctly.
 

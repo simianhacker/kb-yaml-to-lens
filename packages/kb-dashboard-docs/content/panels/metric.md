@@ -80,6 +80,8 @@ dashboards:
 | `breakdown` | `LensDimensionTypes \| None` | Optional breakdown dimension for splitting the metric. | `None` | No |
 | `color` | `ColorMapping \| None` | Color palette mapping for the metric. See [Color Mapping Configuration](base.md#color-mapping-configuration). | `None` | No |
 | `color_mode` | `Literal['none', 'labels', 'background'] \| None` | Optional text/background color mode for metric values. | `None` | No |
+| `apply_color_to` | `Literal['background', 'value'] \| None` | Controls where color is applied: `'background'` or `'value'` (text). Required in Kibana 9.x alongside `color_mode`. | `None` | No |
+| `static_color` | `string \| None` | Hex color code (e.g., `'#209280'`) for a static single-color palette. | `None` | No |
 
 #### Lens Metric Types
 
@@ -145,6 +147,8 @@ primary:
 | `breakdown` | `ESQLDimensionTypes \| None` | Optional breakdown dimension for splitting the metric. | `None` | No |
 | `color` | `ColorMapping \| None` | Color palette mapping for the metric. See [Color Mapping Configuration](base.md#color-mapping-configuration). | `None` | No |
 | `color_mode` | `Literal['none', 'labels', 'background'] \| None` | Optional text/background color mode for metric values. | `None` | No |
+| `apply_color_to` | `Literal['background', 'value'] \| None` | Controls where color is applied: `'background'` or `'value'` (text). Required in Kibana 9.x alongside `color_mode`. | `None` | No |
+| `static_color` | `string \| None` | Hex color code (e.g., `'#209280'`) for a static single-color palette. | `None` | No |
 
 #### ESQL Metric Types
 
@@ -187,6 +191,11 @@ Use `color_mode` to control how metric colors are applied:
 - `labels`: apply colors to metric labels/text
 - `background`: apply colors to metric background
 
+In Kibana 9.x, use `apply_color_to` alongside `color_mode` to specify exactly where the color appears:
+
+- `value`: apply color to the metric value (text)
+- `background`: apply color to the metric background
+
 ```yaml
 dashboards:
   - name: "Metric Color Modes"
@@ -197,6 +206,7 @@ dashboards:
           type: metric
           data_view: "logs-*"
           color_mode: labels
+          apply_color_to: value
           primary:
             formula: "count(kql='event.outcome:failure') / count() * 100"
             label: "Error Rate"
@@ -210,11 +220,48 @@ dashboards:
           type: metric
           data_view: "logs-*"
           color_mode: background
+          apply_color_to: background
           primary:
             formula: "count(kql='event.outcome:success') / count() * 100"
             label: "Availability"
             format:
               type: percent
+```
+
+## Static Color
+
+Use `static_color` to apply a fixed hex color to a metric panel. This generates a single-color custom palette in the compiled output, useful for brand colors or status indicators.
+
+```yaml
+dashboards:
+  - name: "Static Color Metrics"
+    panels:
+      - title: "Healthy Pods"
+        size: {w: 8, h: 4}
+        esql:
+          type: metric
+          color_mode: labels
+          apply_color_to: value
+          static_color: "#209280"
+          query: |
+            FROM metrics-*
+            | STATS healthy_count = COUNT(*) WHERE status == "healthy"
+          primary:
+            field: healthy_count
+            label: Healthy
+
+      - title: "Error Count"
+        size: {w: 8, h: 4}
+        position: {x: 8, y: 0}
+        lens:
+          type: metric
+          data_view: "logs-*"
+          color_mode: background
+          apply_color_to: background
+          static_color: "#BD271E"
+          primary:
+            aggregation: count
+            label: "Errors"
 ```
 
 ## Programmatic Usage (Python)
