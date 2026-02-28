@@ -115,6 +115,9 @@ class KbnMetricVisualizationState(BaseVwModel):
     applyColorTo: Annotated[Literal['background', 'value'] | None, OmitIfNone()] = Field(default=None)
     """Controls where color is applied: 'background' or 'value' (text). Kibana 9.x property."""
 
+    color: Annotated[str | None, OmitIfNone()] = Field(default=None)
+    """Flat hex color for static background/label coloring. Works for any value type."""
+
     palette: Annotated[KbnMetricPalette | None, OmitIfNone()] = Field(default=None)
     """Custom color palette for the metric visualization."""
 
@@ -155,6 +158,9 @@ class KbnESQLMetricVisualizationState(BaseVwModel):
 
     applyColorTo: Annotated[Literal['background', 'value'] | None, OmitIfNone()] = Field(default=None)
     """Controls where color is applied: 'background' or 'value' (text). Kibana 9.x property."""
+
+    color: Annotated[str | None, OmitIfNone()] = Field(default=None)
+    """Flat hex color for static background/label coloring. Works for any value type."""
 
     palette: Annotated[KbnMetricPalette | None, OmitIfNone()] = Field(default=None)
     """Custom color palette for the metric visualization."""
